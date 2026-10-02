@@ -427,6 +427,7 @@ component ColorBox inherits Rectangle {
 
     width: 44px;
     height: 44px;
+    border-radius: 4px;
     background: root.fill-color;
     border-width: touch.has-hover ? 2px : 1px;
     border-color: touch.has-hover ? #ffffff : #38343c;
@@ -450,8 +451,8 @@ component ToggleSwitch inherits Rectangle {
     animate background { duration: 150ms; }
 
     thumb := Rectangle {
-        x: root.checked ? parent.width - 19px : 3px;
-        y: 2px;
+        x: root.checked ? parent.width - self.width - 3px : 3px;
+        y: (parent.height - self.height) / 2;
         width: 16px;
         height: 16px;
         border-radius: 8px;
@@ -725,6 +726,38 @@ component FormatListIcon inherits Rectangle {
     }
 }
 
+component ColorNameIcon inherits Rectangle {
+    width: 16px;
+    height: 16px;
+    background: transparent;
+
+    Rectangle {
+        x: 1px;
+        y: 1px;
+        width: 14px;
+        height: 14px;
+        border-width: 1.5px;
+        border-color: #8a888c;
+        border-radius: 2px;
+    }
+    Rectangle {
+        x: 4px;
+        y: 5px;
+        width: 8px;
+        height: 2px;
+        background: #8a888c;
+        border-radius: 1px;
+    }
+    Rectangle {
+        x: 4px;
+        y: 9px;
+        width: 5px;
+        height: 2px;
+        background: #8a888c;
+        border-radius: 1px;
+    }
+}
+
 component MoreOptionsButton inherits Rectangle {
     callback clicked();
 
@@ -736,9 +769,19 @@ component MoreOptionsButton inherits Rectangle {
     HorizontalLayout {
         spacing: 3px;
         alignment: center;
-        Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
-        Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
-        Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
+
+        VerticalLayout {
+            alignment: center;
+            Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
+        }
+        VerticalLayout {
+            alignment: center;
+            Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
+        }
+        VerticalLayout {
+            alignment: center;
+            Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
+        }
     }
 
     touch := TouchArea {
@@ -835,13 +878,12 @@ component ColorFormatSettingRow inherits Rectangle {
     callback toggled(bool);
     callback more-clicked();
 
-    height: 52px;
+    height: 54px;
     background: transparent;
 
     HorizontalLayout {
         padding-left: 20px;
-        padding-right: 16px;
-        alignment: space-between;
+        padding-right: 20px;
 
         VerticalLayout {
             alignment: center;
@@ -861,20 +903,26 @@ component ColorFormatSettingRow inherits Rectangle {
             }
         }
 
-        HorizontalLayout {
-            spacing: 12px;
+        Rectangle { horizontal-stretch: 1; }
+
+        VerticalLayout {
             alignment: center;
 
-            ToggleSwitch {
-                checked: root.is-enabled;
-                toggled(val) => {
-                    root.is-enabled = val;
-                    root.toggled(val);
-                }
-            }
+            HorizontalLayout {
+                spacing: 12px;
+                alignment: center;
 
-            MoreOptionsButton {
-                clicked => { root.more-clicked(); }
+                ToggleSwitch {
+                    checked: root.is-enabled;
+                    toggled(val) => {
+                        root.is-enabled = val;
+                        root.toggled(val);
+                    }
+                }
+
+                MoreOptionsButton {
+                    clicked => { root.more-clicked(); }
+                }
             }
         }
     }
@@ -1107,7 +1155,7 @@ export component MainWindow inherits Window {
                             }
                         }
 
-                        // 3. Enable Color Picker Card
+                        // Box 1: Enable Color Picker Card
                         Rectangle {
                             height: 64px;
                             background: #1c1a1e;
@@ -1118,57 +1166,66 @@ export component MainWindow inherits Window {
                             HorizontalLayout {
                                 padding-left: 20px;
                                 padding-right: 20px;
-                                alignment: space-between;
 
-                                HorizontalLayout {
-                                    spacing: 16px;
+                                // Left Title with Icon (strictly vertically centered)
+                                VerticalLayout {
                                     alignment: center;
 
-                                    // Blue accent icon tile
-                                    Rectangle {
-                                        width: 32px;
-                                        height: 32px;
-                                        border-radius: 4px;
-                                        background: #0078d4;
+                                    HorizontalLayout {
+                                        spacing: 16px;
 
-                                        EyedropperIcon {
-                                            x: 8px;
-                                            y: 8px;
+                                        Rectangle {
+                                            width: 28px;
+                                            height: 28px;
+                                            border-radius: 4px;
+                                            background: #0078d4;
+
+                                            EyedropperIcon {
+                                                x: (parent.width - self.width) / 2;
+                                                y: (parent.height - self.height) / 2;
+                                            }
                                         }
-                                    }
 
-                                    Text {
-                                        text: "Enable Color Picker";
-                                        font-size: 14px;
-                                        font-weight: 600;
-                                        color: #f0eff1;
-                                        vertical-alignment: center;
+                                        Text {
+                                            text: "Enable Color Picker";
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            color: #f0eff1;
+                                            vertical-alignment: center;
+                                        }
                                     }
                                 }
 
-                                HorizontalLayout {
-                                    spacing: 12px;
+                                Rectangle { horizontal-stretch: 1; }
+
+                                // Right Controls (strictly vertically centered on single baseline)
+                                VerticalLayout {
                                     alignment: center;
 
-                                    Text {
-                                        text: root.is-color-picker-enabled ? "On" : "Off";
-                                        font-size: 13px;
-                                        color: #f0eff1;
-                                        vertical-alignment: center;
-                                    }
+                                    HorizontalLayout {
+                                        spacing: 12px;
+                                        alignment: center;
 
-                                    ToggleSwitch {
-                                        checked: root.is-color-picker-enabled;
-                                        toggled(val) => {
-                                            root.is-color-picker-enabled = val;
-                                            root.enable-toggled(val);
+                                        Text {
+                                            text: root.is-color-picker-enabled ? "On" : "Off";
+                                            font-size: 13px;
+                                            color: #f0eff1;
+                                            vertical-alignment: center;
+                                        }
+
+                                        ToggleSwitch {
+                                            checked: root.is-color-picker-enabled;
+                                            toggled(val) => {
+                                                root.is-color-picker-enabled = val;
+                                                root.enable-toggled(val);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
 
-                        // 4. Shortcut Section
+                        // Box 2: Shortcut Section
                         VerticalLayout {
                             spacing: 8px;
 
@@ -1194,75 +1251,91 @@ export component MainWindow inherits Window {
 
                                         HorizontalLayout {
                                             padding-left: 20px;
-                                            padding-right: 16px;
-                                            alignment: space-between;
+                                            padding-right: 20px;
 
-                                            HorizontalLayout {
-                                                spacing: 16px;
+                                            VerticalLayout {
                                                 alignment: center;
 
-                                                KeyboardIcon { }
+                                                HorizontalLayout {
+                                                    spacing: 16px;
 
-                                                VerticalLayout {
+                                                    Rectangle {
+                                                        width: 28px;
+                                                        height: 28px;
+                                                        background: transparent;
+
+                                                        KeyboardIcon {
+                                                            x: (parent.width - self.width) / 2;
+                                                            y: (parent.height - self.height) / 2;
+                                                        }
+                                                    }
+
+                                                    VerticalLayout {
+                                                        alignment: center;
+                                                        spacing: 2px;
+
+                                                        Text {
+                                                            text: "Activation shortcut";
+                                                            font-size: 14px;
+                                                            font-weight: 600;
+                                                            color: #f0eff1;
+                                                        }
+
+                                                        Text {
+                                                            text: "Customize the shortcut to activate this module";
+                                                            font-size: 12px;
+                                                            color: #8a888c;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            Rectangle { horizontal-stretch: 1; }
+
+                                            VerticalLayout {
+                                                alignment: center;
+
+                                                if !root.is-editing-shortcut: HorizontalLayout {
+                                                    spacing: 6px;
                                                     alignment: center;
-                                                    spacing: 2px;
 
-                                                    Text {
-                                                        text: "Activation shortcut";
-                                                        font-size: 14px;
-                                                        font-weight: 600;
-                                                        color: #f0eff1;
-                                                    }
+                                                    KeyBadge { is-win-key: true; }
+                                                    KeyBadge { key-text: "Shift"; }
+                                                    KeyBadge { key-text: "C"; }
 
-                                                    Text {
-                                                        text: "Customize the shortcut to activate this module";
-                                                        font-size: 12px;
-                                                        color: #8a888c;
-                                                    }
-                                                }
-                                            }
-
-                                            // Right side: Badges or Inline Editor
-                                            if !root.is-editing-shortcut: HorizontalLayout {
-                                                spacing: 6px;
-                                                alignment: center;
-
-                                                KeyBadge { is-win-key: true; }
-                                                KeyBadge { key-text: "Shift"; }
-                                                KeyBadge { key-text: "C"; }
-
-                                                EditPencilButton {
-                                                    clicked => { root.is-editing-shortcut = true; }
-                                                }
-                                            }
-
-                                            if root.is-editing-shortcut: HorizontalLayout {
-                                                spacing: 8px;
-                                                alignment: center;
-
-                                                shortcut-input := SharpInput {
-                                                    width: 180px;
-                                                    text: root.shortcut-text;
-                                                    accepted(val) => {
-                                                        root.is-editing-shortcut = false;
-                                                        root.save-shortcut-clicked(val);
+                                                    EditPencilButton {
+                                                        clicked => { root.is-editing-shortcut = true; }
                                                     }
                                                 }
 
-                                                SharpButton {
-                                                    text: "Save";
-                                                    primary: true;
-                                                    clicked => {
-                                                        root.is-editing-shortcut = false;
-                                                        root.save-shortcut-clicked(shortcut-input.text);
-                                                    }
-                                                }
+                                                if root.is-editing-shortcut: HorizontalLayout {
+                                                    spacing: 8px;
+                                                    alignment: center;
 
-                                                SharpButton {
-                                                    text: "Cancel";
-                                                    primary: false;
-                                                    clicked => {
-                                                        root.is-editing-shortcut = false;
+                                                    shortcut-input := SharpInput {
+                                                        width: 180px;
+                                                        text: root.shortcut-text;
+                                                        accepted(val) => {
+                                                            root.is-editing-shortcut = false;
+                                                            root.save-shortcut-clicked(val);
+                                                        }
+                                                    }
+
+                                                    SharpButton {
+                                                        text: "Save";
+                                                        primary: true;
+                                                        clicked => {
+                                                            root.is-editing-shortcut = false;
+                                                            root.save-shortcut-clicked(shortcut-input.text);
+                                                        }
+                                                    }
+
+                                                    SharpButton {
+                                                        text: "Cancel";
+                                                        primary: false;
+                                                        clicked => {
+                                                            root.is-editing-shortcut = false;
+                                                        }
                                                     }
                                                 }
                                             }
@@ -1274,40 +1347,58 @@ export component MainWindow inherits Window {
 
                                     // Row 2: Activation behavior
                                     Rectangle {
-                                        height: 52px;
+                                        height: 56px;
                                         background: transparent;
 
                                         HorizontalLayout {
                                             padding-left: 20px;
-                                            padding-right: 16px;
-                                            alignment: space-between;
+                                            padding-right: 20px;
 
-                                            HorizontalLayout {
-                                                spacing: 16px;
+                                            VerticalLayout {
                                                 alignment: center;
 
-                                                MonitorIcon { }
+                                                HorizontalLayout {
+                                                    spacing: 16px;
 
-                                                Text {
-                                                    text: "Activation behavior";
-                                                    font-size: 14px;
-                                                    font-weight: 600;
-                                                    color: #f0eff1;
-                                                    vertical-alignment: center;
+                                                    Rectangle {
+                                                        width: 28px;
+                                                        height: 28px;
+                                                        background: transparent;
+
+                                                        MonitorIcon {
+                                                            x: (parent.width - self.width) / 2;
+                                                            y: (parent.height - self.height) / 2;
+                                                        }
+                                                    }
+
+                                                    Text {
+                                                        text: "Activation behavior";
+                                                        font-size: 14px;
+                                                        font-weight: 600;
+                                                        color: #f0eff1;
+                                                        vertical-alignment: center;
+                                                    }
                                                 }
                                             }
 
-                                            DropdownButton {
-                                                text: root.activation-behavior;
-                                                clicked => {
-                                                    if root.activation-behavior == "Open editor" {
-                                                        root.activation-behavior = "Pick a color and open editor";
-                                                    } else if root.activation-behavior == "Pick a color and open editor" {
-                                                        root.activation-behavior = "Only pick a color";
-                                                    } else {
-                                                        root.activation-behavior = "Open editor";
+                                            Rectangle { horizontal-stretch: 1; }
+
+                                            VerticalLayout {
+                                                alignment: center;
+
+                                                DropdownButton {
+                                                    width: 220px;
+                                                    text: root.activation-behavior;
+                                                    clicked => {
+                                                        if root.activation-behavior == "Open editor" {
+                                                            root.activation-behavior = "Pick a color and open editor";
+                                                        } else if root.activation-behavior == "Pick a color and open editor" {
+                                                            root.activation-behavior = "Only pick a color";
+                                                        } else {
+                                                            root.activation-behavior = "Open editor";
+                                                        }
+                                                        root.behavior-changed(root.activation-behavior);
                                                     }
-                                                    root.behavior-changed(root.activation-behavior);
                                                 }
                                             }
                                         }
@@ -1316,7 +1407,7 @@ export component MainWindow inherits Window {
                             }
                         }
 
-                        // 5. Picker behavior Section
+                        // Box 3: Picker behavior Section
                         VerticalLayout {
                             spacing: 8px;
 
@@ -1337,50 +1428,68 @@ export component MainWindow inherits Window {
                                 VerticalLayout {
                                     // Row 1: Default color format
                                     Rectangle {
-                                        height: 58px;
+                                        height: 64px;
                                         background: transparent;
 
                                         HorizontalLayout {
                                             padding-left: 20px;
-                                            padding-right: 16px;
-                                            alignment: space-between;
+                                            padding-right: 20px;
 
-                                            HorizontalLayout {
-                                                spacing: 16px;
+                                            VerticalLayout {
                                                 alignment: center;
 
-                                                ClipboardIcon { }
+                                                HorizontalLayout {
+                                                    spacing: 16px;
 
-                                                VerticalLayout {
-                                                    alignment: center;
-                                                    spacing: 2px;
+                                                    Rectangle {
+                                                        width: 28px;
+                                                        height: 28px;
+                                                        background: transparent;
 
-                                                    Text {
-                                                        text: "Default color format";
-                                                        font-size: 14px;
-                                                        font-weight: 600;
-                                                        color: #f0eff1;
+                                                        ClipboardIcon {
+                                                            x: (parent.width - self.width) / 2;
+                                                            y: (parent.height - self.height) / 2;
+                                                        }
                                                     }
 
-                                                    Text {
-                                                        text: "This format will be copied to your clipboard";
-                                                        font-size: 12px;
-                                                        color: #8a888c;
+                                                    VerticalLayout {
+                                                        alignment: center;
+                                                        spacing: 2px;
+
+                                                        Text {
+                                                            text: "Default color format";
+                                                            font-size: 14px;
+                                                            font-weight: 600;
+                                                            color: #f0eff1;
+                                                        }
+
+                                                        Text {
+                                                            text: "This format will be copied to your clipboard";
+                                                            font-size: 12px;
+                                                            color: #8a888c;
+                                                        }
                                                     }
                                                 }
                                             }
 
-                                            DropdownButton {
-                                                text: "HEX - " + root.current-hex-clean;
-                                                clicked => {
-                                                    if root.default-color-format == "HEX" {
-                                                        root.default-color-format = "RGB";
-                                                    } else if root.default-color-format == "RGB" {
-                                                        root.default-color-format = "HSL";
-                                                    } else {
-                                                        root.default-color-format = "HEX";
+                                            Rectangle { horizontal-stretch: 1; }
+
+                                            VerticalLayout {
+                                                alignment: center;
+
+                                                DropdownButton {
+                                                    width: 220px;
+                                                    text: "HEX - " + root.current-hex-clean;
+                                                    clicked => {
+                                                        if root.default-color-format == "HEX" {
+                                                            root.default-color-format = "RGB";
+                                                        } else if root.default-color-format == "RGB" {
+                                                            root.default-color-format = "HSL";
+                                                        } else {
+                                                            root.default-color-format = "HEX";
+                                                        }
+                                                        root.default-format-changed(root.default-color-format);
                                                     }
-                                                    root.default-format-changed(root.default-color-format);
                                                 }
                                             }
                                         }
@@ -1391,48 +1500,72 @@ export component MainWindow inherits Window {
 
                                     // Row 2: Show color name
                                     Rectangle {
-                                        height: 54px;
+                                        height: 56px;
                                         background: transparent;
 
                                         HorizontalLayout {
                                             padding-left: 20px;
-                                            padding-right: 16px;
-                                            alignment: space-between;
+                                            padding-right: 20px;
 
                                             VerticalLayout {
                                                 alignment: center;
-                                                spacing: 2px;
 
-                                                Text {
-                                                    text: "Show color name";
-                                                    font-size: 14px;
-                                                    font-weight: 600;
-                                                    color: #f0eff1;
-                                                }
+                                                HorizontalLayout {
+                                                    spacing: 16px;
 
-                                                Text {
-                                                    text: "This will show the name of the color when picking a color";
-                                                    font-size: 12px;
-                                                    color: #8a888c;
+                                                    Rectangle {
+                                                        width: 28px;
+                                                        height: 28px;
+                                                        background: transparent;
+
+                                                        ColorNameIcon {
+                                                            x: (parent.width - self.width) / 2;
+                                                            y: (parent.height - self.height) / 2;
+                                                        }
+                                                    }
+
+                                                    VerticalLayout {
+                                                        alignment: center;
+                                                        spacing: 2px;
+
+                                                        Text {
+                                                            text: "Show color name";
+                                                            font-size: 14px;
+                                                            font-weight: 600;
+                                                            color: #f0eff1;
+                                                        }
+
+                                                        Text {
+                                                            text: "This will show the name of the color when picking a color";
+                                                            font-size: 12px;
+                                                            color: #8a888c;
+                                                        }
+                                                    }
                                                 }
                                             }
 
-                                            HorizontalLayout {
-                                                spacing: 12px;
+                                            Rectangle { horizontal-stretch: 1; }
+
+                                            VerticalLayout {
                                                 alignment: center;
 
-                                                Text {
-                                                    text: root.show-color-name ? "On" : "Off";
-                                                    font-size: 13px;
-                                                    color: #f0eff1;
-                                                    vertical-alignment: center;
-                                                }
+                                                HorizontalLayout {
+                                                    spacing: 12px;
+                                                    alignment: center;
 
-                                                ToggleSwitch {
-                                                    checked: root.show-color-name;
-                                                    toggled(val) => {
-                                                        root.show-color-name = val;
-                                                        root.show-name-toggled(val);
+                                                    Text {
+                                                        text: root.show-color-name ? "On" : "Off";
+                                                        font-size: 13px;
+                                                        color: #f0eff1;
+                                                        vertical-alignment: center;
+                                                    }
+
+                                                    ToggleSwitch {
+                                                        checked: root.show-color-name;
+                                                        toggled(val) => {
+                                                            root.show-color-name = val;
+                                                            root.show-name-toggled(val);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -1442,7 +1575,7 @@ export component MainWindow inherits Window {
                             }
                         }
 
-                        // 6. Color formats Section
+                        // Box 4: Color formats Section
                         VerticalLayout {
                             spacing: 8px;
 
@@ -1455,7 +1588,7 @@ export component MainWindow inherits Window {
 
                             // Header card: Color formats title + "Add new format" button
                             Rectangle {
-                                height: 58px;
+                                height: 64px;
                                 background: #1c1a1e;
                                 border-radius: 6px;
                                 border-width: 1px;
@@ -1463,57 +1596,74 @@ export component MainWindow inherits Window {
 
                                 HorizontalLayout {
                                     padding-left: 20px;
-                                    padding-right: 16px;
-                                    alignment: space-between;
+                                    padding-right: 20px;
 
-                                    HorizontalLayout {
-                                        spacing: 16px;
+                                    VerticalLayout {
                                         alignment: center;
 
-                                        FormatListIcon { }
+                                        HorizontalLayout {
+                                            spacing: 16px;
 
-                                        VerticalLayout {
-                                            alignment: center;
-                                            spacing: 2px;
+                                            Rectangle {
+                                                width: 28px;
+                                                height: 28px;
+                                                background: transparent;
 
-                                            Text {
-                                                text: "Color formats";
-                                                font-size: 14px;
-                                                font-weight: 600;
-                                                color: #f0eff1;
+                                                FormatListIcon {
+                                                    x: (parent.width - self.width) / 2;
+                                                    y: (parent.height - self.height) / 2;
+                                                }
                                             }
 
-                                            Text {
-                                                text: "Configure the color formats (edit, delete, hide, reorder them)";
-                                                font-size: 12px;
-                                                color: #8a888c;
+                                            VerticalLayout {
+                                                alignment: center;
+                                                spacing: 2px;
+
+                                                Text {
+                                                    text: "Color formats";
+                                                    font-size: 14px;
+                                                    font-weight: 600;
+                                                    color: #f0eff1;
+                                                }
+
+                                                Text {
+                                                    text: "Configure the color formats (edit, delete, hide, reorder them)";
+                                                    font-size: 12px;
+                                                    color: #8a888c;
+                                                }
                                             }
                                         }
                                     }
 
-                                    Rectangle {
-                                        height: 32px;
-                                        background: add_btn_touch.has-hover ? #1a88e4 : #0078d4;
-                                        border-radius: 4px;
+                                    Rectangle { horizontal-stretch: 1; }
 
-                                        HorizontalLayout {
-                                            padding-left: 14px;
-                                            padding-right: 14px;
-                                            alignment: center;
+                                    VerticalLayout {
+                                        alignment: center;
 
-                                            Text {
-                                                text: "Add new format";
-                                                font-size: 13px;
-                                                font-weight: 600;
-                                                color: #ffffff;
-                                                vertical-alignment: center;
+                                        Rectangle {
+                                            height: 32px;
+                                            background: add_btn_touch.has-hover ? #1a88e4 : #0078d4;
+                                            border-radius: 4px;
+
+                                            HorizontalLayout {
+                                                padding-left: 14px;
+                                                padding-right: 14px;
+                                                alignment: center;
+
+                                                Text {
+                                                    text: "Add new format";
+                                                    font-size: 13px;
+                                                    font-weight: 600;
+                                                    color: #ffffff;
+                                                    vertical-alignment: center;
+                                                }
                                             }
-                                        }
 
-                                        add_btn_touch := TouchArea {
-                                            mouse-cursor: pointer;
-                                            clicked => {
-                                                root.status-text = "Standard formats loaded: HEX, RGB, HSL, HSV, CMYK";
+                                            add_btn_touch := TouchArea {
+                                                mouse-cursor: pointer;
+                                                clicked => {
+                                                    root.status-text = "Standard formats loaded: HEX, RGB, HSL, HSV, CMYK";
+                                                }
                                             }
                                         }
                                     }
