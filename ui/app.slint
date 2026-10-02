@@ -339,22 +339,27 @@ component SidebarItem inherits Rectangle {
         padding-left: 18px;
         padding-right: 18px;
         spacing: 12px;
-        alignment: center;
+        alignment: start;
 
-        // Clean vector color swatch
-        Rectangle {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            background: root.is-active ? #b59ee6 : #6e6b72;
+        // Clean vector color swatch vertically centered
+        VerticalLayout {
+            alignment: center;
+            Rectangle {
+                width: 14px;
+                height: 14px;
+                border-radius: 3px;
+                background: root.is-active ? #b59ee6 : #6e6b72;
+            }
         }
 
-        Text {
-            text: root.text;
-            font-size: 15px;
-            font-weight: root.is-active ? 600 : 500;
-            color: root.is-active ? #f0eff1 : (touch.has-hover ? #ecebec : #a6a4a8);
-            vertical-alignment: center;
+        VerticalLayout {
+            alignment: center;
+            Text {
+                text: root.text;
+                font-size: 14px;
+                font-weight: root.is-active ? 600 : 500;
+                color: root.is-active ? #f0eff1 : (touch.has-hover ? #ecebec : #a6a4a8);
+            }
         }
     }
 
@@ -442,23 +447,31 @@ component ToggleSwitch inherits Rectangle {
     callback toggled(bool);
 
     width: 44px;
-    height: 22px;
-    border-radius: 11px;
-    background: root.checked ? #0078d4 : #28252c;
-    border-width: 1px;
-    border-color: root.checked ? #0078d4 : #45414d;
+    height: 28px;
+    background: transparent;
 
-    animate background { duration: 150ms; }
-
-    thumb := Rectangle {
-        x: root.checked ? parent.width - self.width - 3px : 3px;
+    track := Rectangle {
+        x: 0px;
         y: (parent.height - self.height) / 2;
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
-        background: #ffffff;
+        width: 44px;
+        height: 22px;
+        border-radius: 11px;
+        background: root.checked ? #0078d4 : #28252c;
+        border-width: 1px;
+        border-color: root.checked ? #0078d4 : #45414d;
 
-        animate x { duration: 150ms; easing: ease-out; }
+        animate background { duration: 150ms; }
+
+        thumb := Rectangle {
+            x: root.checked ? parent.width - self.width - 3px : 3px;
+            y: (parent.height - self.height) / 2;
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            background: #ffffff;
+
+            animate x { duration: 150ms; easing: ease-out; }
+        }
     }
 
     TouchArea {
@@ -485,22 +498,28 @@ component KeyBadge inherits Rectangle {
         padding-right: 10px;
         alignment: center;
 
-        if root.is-win-key: Rectangle {
-            width: 14px;
-            height: 14px;
+        if root.is-win-key: VerticalLayout {
+            alignment: center;
+            Rectangle {
+                width: 14px;
+                height: 14px;
 
-            Rectangle { x: 0px; y: 0px; width: 6px; height: 6px; border-radius: 1px; background: #ffffff; }
-            Rectangle { x: 8px; y: 0px; width: 6px; height: 6px; border-radius: 1px; background: #ffffff; }
-            Rectangle { x: 0px; y: 8px; width: 6px; height: 6px; border-radius: 1px; background: #ffffff; }
-            Rectangle { x: 8px; y: 8px; width: 6px; height: 6px; border-radius: 1px; background: #ffffff; }
+                Rectangle { x: 0px; y: 0px; width: 6px; height: 6px; border-radius: 1px; background: #ffffff; }
+                Rectangle { x: 8px; y: 0px; width: 6px; height: 6px; border-radius: 1px; background: #ffffff; }
+                Rectangle { x: 0px; y: 8px; width: 6px; height: 6px; border-radius: 1px; background: #ffffff; }
+                Rectangle { x: 8px; y: 8px; width: 6px; height: 6px; border-radius: 1px; background: #ffffff; }
+            }
         }
 
-        if !root.is-win-key: Text {
-            text: root.key-text;
-            font-size: 13px;
-            font-weight: 600;
-            color: #ffffff;
-            vertical-alignment: center;
+        if !root.is-win-key: VerticalLayout {
+            alignment: center;
+            Text {
+                text: root.key-text;
+                font-size: 13px;
+                font-weight: 600;
+                color: #ffffff;
+                vertical-alignment: center;
+            }
         }
     }
 }
@@ -580,23 +599,23 @@ component EyedropperIcon inherits Rectangle {
 component EditPencilButton inherits Rectangle {
     callback clicked();
 
-    width: 32px;
+    width: 30px;
     height: 30px;
     border-radius: 4px;
     background: touch.has-hover ? #2e2a34 : transparent;
 
     Rectangle {
-        x: 9px;
-        y: 8px;
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
         width: 14px;
         height: 14px;
         background: transparent;
 
         Rectangle {
             x: 5px;
-            y: 2px;
+            y: 1px;
             width: 4px;
-            height: 7px;
+            height: 8px;
             border-radius: 1px;
             background: #8a888c;
         }
@@ -609,7 +628,7 @@ component EditPencilButton inherits Rectangle {
         }
         Rectangle {
             x: 3px;
-            y: 12px;
+            y: 13px;
             width: 8px;
             height: 1.5px;
             border-radius: 0.5px;
@@ -772,15 +791,15 @@ component MoreOptionsButton inherits Rectangle {
 
         VerticalLayout {
             alignment: center;
-            Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
+            Rectangle { width: 3.5px; height: 3.5px; border-radius: 1.75px; background: #9a989c; }
         }
         VerticalLayout {
             alignment: center;
-            Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
+            Rectangle { width: 3.5px; height: 3.5px; border-radius: 1.75px; background: #9a989c; }
         }
         VerticalLayout {
             alignment: center;
-            Rectangle { width: 3px; height: 3px; border-radius: 1.5px; background: #8a888c; }
+            Rectangle { width: 3.5px; height: 3.5px; border-radius: 1.75px; background: #9a989c; }
         }
     }
 
@@ -871,35 +890,270 @@ component HeroIllustration inherits Rectangle {
     }
 }
 
-component ColorFormatSettingRow inherits Rectangle {
-    in property <string> format-name;
-    in property <string> format-preview;
-    in-out property <bool> is-enabled: true;
-    callback toggled(bool);
-    callback more-clicked();
+component IconSlot inherits Rectangle {
+    in property <string> kind: "";
+    in property <color> icon-bg: transparent;
 
-    height: 54px;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    background: root.icon-bg;
+
+    if root.kind == "eyedropper": EyedropperIcon {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+    }
+    if root.kind == "keyboard": KeyboardIcon {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+    }
+    if root.kind == "monitor": MonitorIcon {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+    }
+    if root.kind == "clipboard": ClipboardIcon {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+    }
+    if root.kind == "name": ColorNameIcon {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+    }
+    if root.kind == "list": FormatListIcon {
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+    }
+}
+
+component SettingsRow inherits Rectangle {
+    in property <string> title: "";
+    in property <string> description: "";
+    in property <string> icon-kind: "";
+    in property <color> icon-bg: transparent;
+    in property <length> row-height: 64px;
+    in property <bool> show-divider: false;
+
+    height: root.row-height;
     background: transparent;
 
     HorizontalLayout {
         padding-left: 20px;
         padding-right: 20px;
+        spacing: 16px;
+
+        // Left Content: Icon + Title/Description
+        VerticalLayout {
+            alignment: center;
+
+            HorizontalLayout {
+                spacing: 16px;
+
+                if root.icon-kind != "": IconSlot {
+                    kind: root.icon-kind;
+                    icon-bg: root.icon-bg;
+                }
+
+                VerticalLayout {
+                    alignment: center;
+                    spacing: 2px;
+
+                    Text {
+                        text: root.title;
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #f0eff1;
+                        vertical-alignment: center;
+                    }
+
+                    if root.description != "": Text {
+                        text: root.description;
+                        font-size: 12px;
+                        color: #8a888c;
+                        vertical-alignment: center;
+                    }
+                }
+            }
+        }
+
+        // Constraint Spacer: pushes action slot to the right padding boundary
+        Rectangle { horizontal-stretch: 1; }
+
+        // Right Content: Action slot centered on the row midline
+        VerticalLayout {
+            alignment: center;
+            @children
+        }
+    }
+
+    if root.show-divider: Rectangle {
+        y: parent.height - 1px;
+        height: 1px;
+        background: #26232b;
+    }
+}
+
+component SettingsCard inherits Rectangle {
+    in property <string> title: "";
+    in property <string> description: "";
+    in property <string> icon-kind: "";
+    in property <color> icon-bg: transparent;
+    in property <length> row-height: 64px;
+
+    height: root.row-height;
+    background: #1c1a1e;
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: #2c2832;
+
+    SettingsRow {
+        title: root.title;
+        description: root.description;
+        icon-kind: root.icon-kind;
+        icon-bg: root.icon-bg;
+        row-height: root.row-height;
+        show-divider: false;
+
+        @children
+    }
+}
+
+component SettingsGroup inherits Rectangle {
+    background: #1c1a1e;
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: #2c2832;
+
+    VerticalLayout {
+        @children
+    }
+}
+
+component SectionHeader inherits Text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f0eff1;
+}
+
+component ToggleWithLabel inherits HorizontalLayout {
+    in-out property <bool> checked: true;
+    callback toggled(bool);
+
+    spacing: 12px;
+    alignment: center;
+
+    VerticalLayout {
+        alignment: center;
+        Text {
+            text: root.checked ? "On" : "Off";
+            font-size: 13px;
+            color: #f0eff1;
+            vertical-alignment: center;
+        }
+    }
+
+    VerticalLayout {
+        alignment: center;
+        ToggleSwitch {
+            checked: root.checked;
+            toggled(val) => { root.toggled(val); }
+        }
+    }
+}
+
+component FormatRowActions inherits HorizontalLayout {
+    in-out property <bool> checked: true;
+    callback toggled(bool);
+    callback more-clicked();
+
+    spacing: 12px;
+    alignment: center;
+
+    VerticalLayout {
+        alignment: center;
+        ToggleSwitch {
+            checked: root.checked;
+            toggled(val) => { root.toggled(val); }
+        }
+    }
+
+    VerticalLayout {
+        alignment: center;
+        MoreOptionsButton {
+            clicked => { root.more-clicked(); }
+        }
+    }
+}
+
+component ShortcutBadgeGroup inherits HorizontalLayout {
+    callback edit-clicked();
+
+    spacing: 6px;
+    alignment: center;
+
+    VerticalLayout {
+        alignment: center;
+        KeyBadge { is-win-key: true; }
+    }
+    VerticalLayout {
+        alignment: center;
+        KeyBadge { key-text: "Shift"; }
+    }
+    VerticalLayout {
+        alignment: center;
+        KeyBadge { key-text: "C"; }
+    }
+
+    Rectangle { width: 6px; background: transparent; }
+
+    VerticalLayout {
+        alignment: center;
+        EditPencilButton {
+            clicked => { root.edit-clicked(); }
+        }
+    }
+}
+
+component HeroCard inherits Rectangle {
+    callback pick-color-clicked();
+    callback learn-more-clicked();
+
+    height: 80px;
+    background: transparent;
+
+    HorizontalLayout {
+        spacing: 20px;
+
+        HeroIllustration { }
 
         VerticalLayout {
             alignment: center;
-            spacing: 2px;
+            spacing: 6px;
 
             Text {
-                text: root.format-name;
-                font-size: 14px;
-                font-weight: 600;
-                color: #f0eff1;
+                text: "Quick and simple system-wide color picker.";
+                font-size: 13px;
+                color: #a6a4a8;
             }
 
-            Text {
-                text: root.format-preview;
-                font-size: 12px;
-                color: #8a888c;
+            Rectangle {
+                height: 20px;
+                background: transparent;
+
+                HorizontalLayout {
+                    alignment: start;
+                    Text {
+                        text: "Learn more about Color Picker";
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: #4cc2ff;
+                        vertical-alignment: center;
+                    }
+                }
+
+                TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => { root.learn-more-clicked(); }
+                }
             }
         }
 
@@ -908,21 +1162,10 @@ component ColorFormatSettingRow inherits Rectangle {
         VerticalLayout {
             alignment: center;
 
-            HorizontalLayout {
-                spacing: 12px;
-                alignment: center;
-
-                ToggleSwitch {
-                    checked: root.is-enabled;
-                    toggled(val) => {
-                        root.is-enabled = val;
-                        root.toggled(val);
-                    }
-                }
-
-                MoreOptionsButton {
-                    clicked => { root.more-clicked(); }
-                }
+            SharpButton {
+                text: "Pick Color (Hyprpicker)";
+                primary: true;
+                clicked => { root.pick-color-clicked(); }
             }
         }
     }
@@ -1045,9 +1288,9 @@ export component MainWindow inherits Window {
                         }
                     }
 
-                    // Module 0: Colour Picker
+                    // Module 0: Color Picker
                     SidebarItem {
-                        text: "Colour Picker";
+                        text: "Color Picker";
                         is-active: root.selected-index == 0;
                         clicked => { root.selected-index = 0; }
                     }
@@ -1102,586 +1345,173 @@ export component MainWindow inherits Window {
                             }
                         }
 
-                        // 2. Hero Card (Thumbnail illustration on left, info & action on right)
-                        Rectangle {
-                            background: transparent;
-                            height: 80px;
+                        // 2. Hero Card (Constraint-aligned)
+                        HeroCard {
+                            pick-color-clicked => { root.pick-color-clicked(); }
+                            learn-more-clicked => { root.status-text = "Official Microsoft PowerToys Color Picker active"; }
+                        }
 
-                            HorizontalLayout {
-                                spacing: 20px;
-                                alignment: start;
+                        // 3. Enable Color Picker Card (Constraint-aligned)
+                        SettingsCard {
+                            title: "Enable Color Picker";
+                            icon-kind: "eyedropper";
+                            icon-bg: #0078d4;
 
-                                HeroIllustration { }
+                            ToggleWithLabel {
+                                checked: root.is-color-picker-enabled;
+                                toggled(val) => {
+                                    root.is-color-picker-enabled = val;
+                                    root.enable-toggled(val);
+                                }
+                            }
+                        }
 
-                                VerticalLayout {
-                                    alignment: center;
-                                    spacing: 8px;
+                        // 4. Shortcut Section (Constraint-aligned)
+                        VerticalLayout {
+                            spacing: 8px;
 
-                                    Text {
-                                        text: "Quick and simple system-wide color picker.";
-                                        font-size: 13px;
-                                        color: #a6a4a8;
+                            SectionHeader { text: "Shortcut"; }
+
+                            SettingsGroup {
+                                SettingsRow {
+                                    title: "Activation shortcut";
+                                    description: "Customize the shortcut to activate this module";
+                                    icon-kind: "keyboard";
+                                    show-divider: true;
+
+                                    if !root.is-editing-shortcut: ShortcutBadgeGroup {
+                                        edit-clicked => { root.is-editing-shortcut = true; }
                                     }
 
-                                    HorizontalLayout {
-                                        spacing: 16px;
+                                    if root.is-editing-shortcut: HorizontalLayout {
+                                        spacing: 8px;
                                         alignment: center;
 
-                                        Rectangle {
-                                            height: 22px;
-                                            background: transparent;
-                                            Text {
-                                                text: "Learn more about Color Picker";
-                                                font-size: 13px;
-                                                font-weight: 600;
-                                                color: #4cc2ff;
-                                                vertical-alignment: center;
-                                            }
-                                            TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => {
-                                                    root.status-text = "Official Microsoft PowerToys Color Picker active";
-                                                }
+                                        shortcut-input := SharpInput {
+                                            width: 180px;
+                                            text: root.shortcut-text;
+                                            accepted(val) => {
+                                                root.is-editing-shortcut = false;
+                                                root.save-shortcut-clicked(val);
                                             }
                                         }
 
                                         SharpButton {
-                                            text: "Pick Color (Hyprpicker)";
+                                            text: "Save";
                                             primary: true;
-                                            clicked => { root.pick-color-clicked(); }
+                                            clicked => {
+                                                root.is-editing-shortcut = false;
+                                                root.save-shortcut-clicked(shortcut-input.text);
+                                            }
+                                        }
+
+                                        SharpButton {
+                                            text: "Cancel";
+                                            primary: false;
+                                            clicked => {
+                                                root.is-editing-shortcut = false;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                SettingsRow {
+                                    title: "Activation behavior";
+                                    icon-kind: "monitor";
+
+                                    DropdownButton {
+                                        width: 220px;
+                                        text: root.activation-behavior;
+                                        clicked => {
+                                            if root.activation-behavior == "Open editor" {
+                                                root.activation-behavior = "Pick a color and open editor";
+                                            } else if root.activation-behavior == "Pick a color and open editor" {
+                                                root.activation-behavior = "Only pick a color";
+                                            } else {
+                                                root.activation-behavior = "Open editor";
+                                            }
+                                            root.behavior-changed(root.activation-behavior);
                                         }
                                     }
                                 }
                             }
                         }
 
-                        // Box 1: Enable Color Picker Card
-                        Rectangle {
-                            height: 64px;
-                            background: #1c1a1e;
-                            border-radius: 6px;
-                            border-width: 1px;
-                            border-color: #2c2832;
-
-                            HorizontalLayout {
-                                padding-left: 20px;
-                                padding-right: 20px;
-
-                                // Left Title with Icon (strictly vertically centered)
-                                VerticalLayout {
-                                    alignment: center;
-
-                                    HorizontalLayout {
-                                        spacing: 16px;
-
-                                        Rectangle {
-                                            width: 28px;
-                                            height: 28px;
-                                            border-radius: 4px;
-                                            background: #0078d4;
-
-                                            EyedropperIcon {
-                                                x: (parent.width - self.width) / 2;
-                                                y: (parent.height - self.height) / 2;
-                                            }
-                                        }
-
-                                        Text {
-                                            text: "Enable Color Picker";
-                                            font-size: 14px;
-                                            font-weight: 600;
-                                            color: #f0eff1;
-                                            vertical-alignment: center;
-                                        }
-                                    }
-                                }
-
-                                Rectangle { horizontal-stretch: 1; }
-
-                                // Right Controls (strictly vertically centered on single baseline)
-                                VerticalLayout {
-                                    alignment: center;
-
-                                    HorizontalLayout {
-                                        spacing: 12px;
-                                        alignment: center;
-
-                                        Text {
-                                            text: root.is-color-picker-enabled ? "On" : "Off";
-                                            font-size: 13px;
-                                            color: #f0eff1;
-                                            vertical-alignment: center;
-                                        }
-
-                                        ToggleSwitch {
-                                            checked: root.is-color-picker-enabled;
-                                            toggled(val) => {
-                                                root.is-color-picker-enabled = val;
-                                                root.enable-toggled(val);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // Box 2: Shortcut Section
+                        // 5. Picker behavior Section (Constraint-aligned)
                         VerticalLayout {
                             spacing: 8px;
 
-                            Text {
-                                text: "Shortcut";
-                                font-size: 14px;
-                                font-weight: 600;
-                                color: #f0eff1;
-                            }
+                            SectionHeader { text: "Picker behavior"; }
 
-                            // Group container for Shortcut settings
-                            Rectangle {
-                                background: #1c1a1e;
-                                border-radius: 6px;
-                                border-width: 1px;
-                                border-color: #2c2832;
+                            SettingsGroup {
+                                SettingsRow {
+                                    title: "Default color format";
+                                    description: "This format will be copied to your clipboard";
+                                    icon-kind: "clipboard";
+                                    show-divider: true;
 
-                                VerticalLayout {
-                                    // Row 1: Activation shortcut
-                                    Rectangle {
-                                        height: 64px;
-                                        background: transparent;
-
-                                        HorizontalLayout {
-                                            padding-left: 20px;
-                                            padding-right: 20px;
-
-                                            VerticalLayout {
-                                                alignment: center;
-
-                                                HorizontalLayout {
-                                                    spacing: 16px;
-
-                                                    Rectangle {
-                                                        width: 28px;
-                                                        height: 28px;
-                                                        background: transparent;
-
-                                                        KeyboardIcon {
-                                                            x: (parent.width - self.width) / 2;
-                                                            y: (parent.height - self.height) / 2;
-                                                        }
-                                                    }
-
-                                                    VerticalLayout {
-                                                        alignment: center;
-                                                        spacing: 2px;
-
-                                                        Text {
-                                                            text: "Activation shortcut";
-                                                            font-size: 14px;
-                                                            font-weight: 600;
-                                                            color: #f0eff1;
-                                                        }
-
-                                                        Text {
-                                                            text: "Customize the shortcut to activate this module";
-                                                            font-size: 12px;
-                                                            color: #8a888c;
-                                                        }
-                                                    }
-                                                }
+                                    DropdownButton {
+                                        width: 220px;
+                                        text: "HEX - " + root.current-hex-clean;
+                                        clicked => {
+                                            if root.default-color-format == "HEX" {
+                                                root.default-color-format = "RGB";
+                                            } else if root.default-color-format == "RGB" {
+                                                root.default-color-format = "HSL";
+                                            } else {
+                                                root.default-color-format = "HEX";
                                             }
-
-                                            Rectangle { horizontal-stretch: 1; }
-
-                                            VerticalLayout {
-                                                alignment: center;
-
-                                                if !root.is-editing-shortcut: HorizontalLayout {
-                                                    spacing: 6px;
-                                                    alignment: center;
-
-                                                    KeyBadge { is-win-key: true; }
-                                                    KeyBadge { key-text: "Shift"; }
-                                                    KeyBadge { key-text: "C"; }
-
-                                                    EditPencilButton {
-                                                        clicked => { root.is-editing-shortcut = true; }
-                                                    }
-                                                }
-
-                                                if root.is-editing-shortcut: HorizontalLayout {
-                                                    spacing: 8px;
-                                                    alignment: center;
-
-                                                    shortcut-input := SharpInput {
-                                                        width: 180px;
-                                                        text: root.shortcut-text;
-                                                        accepted(val) => {
-                                                            root.is-editing-shortcut = false;
-                                                            root.save-shortcut-clicked(val);
-                                                        }
-                                                    }
-
-                                                    SharpButton {
-                                                        text: "Save";
-                                                        primary: true;
-                                                        clicked => {
-                                                            root.is-editing-shortcut = false;
-                                                            root.save-shortcut-clicked(shortcut-input.text);
-                                                        }
-                                                    }
-
-                                                    SharpButton {
-                                                        text: "Cancel";
-                                                        primary: false;
-                                                        clicked => {
-                                                            root.is-editing-shortcut = false;
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            root.default-format-changed(root.default-color-format);
                                         }
                                     }
+                                }
 
-                                    // Divider Line
-                                    Rectangle { height: 1px; background: #26232b; }
+                                SettingsRow {
+                                    title: "Show color name";
+                                    description: "This will show the name of the color when picking a color";
+                                    icon-kind: "name";
+                                    row-height: 56px;
 
-                                    // Row 2: Activation behavior
-                                    Rectangle {
-                                        height: 56px;
-                                        background: transparent;
-
-                                        HorizontalLayout {
-                                            padding-left: 20px;
-                                            padding-right: 20px;
-
-                                            VerticalLayout {
-                                                alignment: center;
-
-                                                HorizontalLayout {
-                                                    spacing: 16px;
-
-                                                    Rectangle {
-                                                        width: 28px;
-                                                        height: 28px;
-                                                        background: transparent;
-
-                                                        MonitorIcon {
-                                                            x: (parent.width - self.width) / 2;
-                                                            y: (parent.height - self.height) / 2;
-                                                        }
-                                                    }
-
-                                                    Text {
-                                                        text: "Activation behavior";
-                                                        font-size: 14px;
-                                                        font-weight: 600;
-                                                        color: #f0eff1;
-                                                        vertical-alignment: center;
-                                                    }
-                                                }
-                                            }
-
-                                            Rectangle { horizontal-stretch: 1; }
-
-                                            VerticalLayout {
-                                                alignment: center;
-
-                                                DropdownButton {
-                                                    width: 220px;
-                                                    text: root.activation-behavior;
-                                                    clicked => {
-                                                        if root.activation-behavior == "Open editor" {
-                                                            root.activation-behavior = "Pick a color and open editor";
-                                                        } else if root.activation-behavior == "Pick a color and open editor" {
-                                                            root.activation-behavior = "Only pick a color";
-                                                        } else {
-                                                            root.activation-behavior = "Open editor";
-                                                        }
-                                                        root.behavior-changed(root.activation-behavior);
-                                                    }
-                                                }
-                                            }
+                                    ToggleWithLabel {
+                                        checked: root.show-color-name;
+                                        toggled(val) => {
+                                            root.show-color-name = val;
+                                            root.show-name-toggled(val);
                                         }
                                     }
                                 }
                             }
                         }
 
-                        // Box 3: Picker behavior Section
+                        // 6. Color formats Section (Constraint-aligned)
                         VerticalLayout {
                             spacing: 8px;
 
-                            Text {
-                                text: "Picker behavior";
-                                font-size: 14px;
-                                font-weight: 600;
-                                color: #f0eff1;
-                            }
+                            SectionHeader { text: "Color formats"; }
 
-                            // Group container for Picker behavior
-                            Rectangle {
-                                background: #1c1a1e;
-                                border-radius: 6px;
-                                border-width: 1px;
-                                border-color: #2c2832;
+                            SettingsCard {
+                                title: "Color formats";
+                                description: "Configure the color formats (edit, delete, hide, reorder them)";
+                                icon-kind: "list";
 
-                                VerticalLayout {
-                                    // Row 1: Default color format
-                                    Rectangle {
-                                        height: 64px;
-                                        background: transparent;
-
-                                        HorizontalLayout {
-                                            padding-left: 20px;
-                                            padding-right: 20px;
-
-                                            VerticalLayout {
-                                                alignment: center;
-
-                                                HorizontalLayout {
-                                                    spacing: 16px;
-
-                                                    Rectangle {
-                                                        width: 28px;
-                                                        height: 28px;
-                                                        background: transparent;
-
-                                                        ClipboardIcon {
-                                                            x: (parent.width - self.width) / 2;
-                                                            y: (parent.height - self.height) / 2;
-                                                        }
-                                                    }
-
-                                                    VerticalLayout {
-                                                        alignment: center;
-                                                        spacing: 2px;
-
-                                                        Text {
-                                                            text: "Default color format";
-                                                            font-size: 14px;
-                                                            font-weight: 600;
-                                                            color: #f0eff1;
-                                                        }
-
-                                                        Text {
-                                                            text: "This format will be copied to your clipboard";
-                                                            font-size: 12px;
-                                                            color: #8a888c;
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            Rectangle { horizontal-stretch: 1; }
-
-                                            VerticalLayout {
-                                                alignment: center;
-
-                                                DropdownButton {
-                                                    width: 220px;
-                                                    text: "HEX - " + root.current-hex-clean;
-                                                    clicked => {
-                                                        if root.default-color-format == "HEX" {
-                                                            root.default-color-format = "RGB";
-                                                        } else if root.default-color-format == "RGB" {
-                                                            root.default-color-format = "HSL";
-                                                        } else {
-                                                            root.default-color-format = "HEX";
-                                                        }
-                                                        root.default-format-changed(root.default-color-format);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    // Divider Line
-                                    Rectangle { height: 1px; background: #26232b; }
-
-                                    // Row 2: Show color name
-                                    Rectangle {
-                                        height: 56px;
-                                        background: transparent;
-
-                                        HorizontalLayout {
-                                            padding-left: 20px;
-                                            padding-right: 20px;
-
-                                            VerticalLayout {
-                                                alignment: center;
-
-                                                HorizontalLayout {
-                                                    spacing: 16px;
-
-                                                    Rectangle {
-                                                        width: 28px;
-                                                        height: 28px;
-                                                        background: transparent;
-
-                                                        ColorNameIcon {
-                                                            x: (parent.width - self.width) / 2;
-                                                            y: (parent.height - self.height) / 2;
-                                                        }
-                                                    }
-
-                                                    VerticalLayout {
-                                                        alignment: center;
-                                                        spacing: 2px;
-
-                                                        Text {
-                                                            text: "Show color name";
-                                                            font-size: 14px;
-                                                            font-weight: 600;
-                                                            color: #f0eff1;
-                                                        }
-
-                                                        Text {
-                                                            text: "This will show the name of the color when picking a color";
-                                                            font-size: 12px;
-                                                            color: #8a888c;
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            Rectangle { horizontal-stretch: 1; }
-
-                                            VerticalLayout {
-                                                alignment: center;
-
-                                                HorizontalLayout {
-                                                    spacing: 12px;
-                                                    alignment: center;
-
-                                                    Text {
-                                                        text: root.show-color-name ? "On" : "Off";
-                                                        font-size: 13px;
-                                                        color: #f0eff1;
-                                                        vertical-alignment: center;
-                                                    }
-
-                                                    ToggleSwitch {
-                                                        checked: root.show-color-name;
-                                                        toggled(val) => {
-                                                            root.show-color-name = val;
-                                                            root.show-name-toggled(val);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // Box 4: Color formats Section
-                        VerticalLayout {
-                            spacing: 8px;
-
-                            Text {
-                                text: "Color formats";
-                                font-size: 14px;
-                                font-weight: 600;
-                                color: #f0eff1;
-                            }
-
-                            // Header card: Color formats title + "Add new format" button
-                            Rectangle {
-                                height: 64px;
-                                background: #1c1a1e;
-                                border-radius: 6px;
-                                border-width: 1px;
-                                border-color: #2c2832;
-
-                                HorizontalLayout {
-                                    padding-left: 20px;
-                                    padding-right: 20px;
-
-                                    VerticalLayout {
-                                        alignment: center;
-
-                                        HorizontalLayout {
-                                            spacing: 16px;
-
-                                            Rectangle {
-                                                width: 28px;
-                                                height: 28px;
-                                                background: transparent;
-
-                                                FormatListIcon {
-                                                    x: (parent.width - self.width) / 2;
-                                                    y: (parent.height - self.height) / 2;
-                                                }
-                                            }
-
-                                            VerticalLayout {
-                                                alignment: center;
-                                                spacing: 2px;
-
-                                                Text {
-                                                    text: "Color formats";
-                                                    font-size: 14px;
-                                                    font-weight: 600;
-                                                    color: #f0eff1;
-                                                }
-
-                                                Text {
-                                                    text: "Configure the color formats (edit, delete, hide, reorder them)";
-                                                    font-size: 12px;
-                                                    color: #8a888c;
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    Rectangle { horizontal-stretch: 1; }
-
-                                    VerticalLayout {
-                                        alignment: center;
-
-                                        Rectangle {
-                                            height: 32px;
-                                            background: add_btn_touch.has-hover ? #1a88e4 : #0078d4;
-                                            border-radius: 4px;
-
-                                            HorizontalLayout {
-                                                padding-left: 14px;
-                                                padding-right: 14px;
-                                                alignment: center;
-
-                                                Text {
-                                                    text: "Add new format";
-                                                    font-size: 13px;
-                                                    font-weight: 600;
-                                                    color: #ffffff;
-                                                    vertical-alignment: center;
-                                                }
-                                            }
-
-                                            add_btn_touch := TouchArea {
-                                                mouse-cursor: pointer;
-                                                clicked => {
-                                                    root.status-text = "Standard formats loaded: HEX, RGB, HSL, HSV, CMYK";
-                                                }
-                                            }
-                                        }
+                                SharpButton {
+                                    text: "Add new format";
+                                    primary: true;
+                                    clicked => {
+                                        root.status-text = "Standard formats loaded: HEX, RGB, HSL, HSV, CMYK";
                                     }
                                 }
                             }
 
-                            // Stacked individual format rows
-                            Rectangle {
-                                background: #1c1a1e;
-                                border-radius: 6px;
-                                border-width: 1px;
-                                border-color: #2c2832;
+                            SettingsGroup {
+                                SettingsRow {
+                                    title: "HEX";
+                                    description: root.current-hex-clean;
+                                    row-height: 54px;
+                                    show-divider: true;
 
-                                VerticalLayout {
-                                    ColorFormatSettingRow {
-                                        format-name: "HEX";
-                                        format-preview: root.current-hex-clean;
-                                        is-enabled: root.hex-format-enabled;
+                                    FormatRowActions {
+                                        checked: root.hex-format-enabled;
                                         toggled(val) => {
                                             root.hex-format-enabled = val;
                                             root.format-toggled("HEX", val);
@@ -1690,13 +1520,16 @@ export component MainWindow inherits Window {
                                             root.copy-hex-clicked(root.current-hex);
                                         }
                                     }
+                                }
 
-                                    Rectangle { height: 1px; background: #26232b; }
+                                SettingsRow {
+                                    title: "RGB";
+                                    description: root.current-rgb;
+                                    row-height: 54px;
+                                    show-divider: true;
 
-                                    ColorFormatSettingRow {
-                                        format-name: "RGB";
-                                        format-preview: root.current-rgb;
-                                        is-enabled: root.rgb-format-enabled;
+                                    FormatRowActions {
+                                        checked: root.rgb-format-enabled;
                                         toggled(val) => {
                                             root.rgb-format-enabled = val;
                                             root.format-toggled("RGB", val);
@@ -1705,13 +1538,16 @@ export component MainWindow inherits Window {
                                             root.copy-rgb-clicked(root.current-rgb);
                                         }
                                     }
+                                }
 
-                                    Rectangle { height: 1px; background: #26232b; }
+                                SettingsRow {
+                                    title: "HSL";
+                                    description: root.current-hsl;
+                                    row-height: 54px;
+                                    show-divider: true;
 
-                                    ColorFormatSettingRow {
-                                        format-name: "HSL";
-                                        format-preview: root.current-hsl;
-                                        is-enabled: root.hsl-format-enabled;
+                                    FormatRowActions {
+                                        checked: root.hsl-format-enabled;
                                         toggled(val) => {
                                             root.hsl-format-enabled = val;
                                             root.format-toggled("HSL", val);
@@ -1720,13 +1556,16 @@ export component MainWindow inherits Window {
                                             root.copy-hsl-clicked(root.current-hsl);
                                         }
                                     }
+                                }
 
-                                    Rectangle { height: 1px; background: #26232b; }
+                                SettingsRow {
+                                    title: "HSV";
+                                    description: root.current-hsv;
+                                    row-height: 54px;
+                                    show-divider: true;
 
-                                    ColorFormatSettingRow {
-                                        format-name: "HSV";
-                                        format-preview: root.current-hsv;
-                                        is-enabled: root.hsv-format-enabled;
+                                    FormatRowActions {
+                                        checked: root.hsv-format-enabled;
                                         toggled(val) => {
                                             root.hsv-format-enabled = val;
                                             root.format-toggled("HSV", val);
@@ -1735,13 +1574,16 @@ export component MainWindow inherits Window {
                                             root.copy-hex-clicked(root.current-hex);
                                         }
                                     }
+                                }
 
-                                    Rectangle { height: 1px; background: #26232b; }
+                                SettingsRow {
+                                    title: "CMYK";
+                                    description: root.current-cmyk;
+                                    row-height: 54px;
+                                    show-divider: false;
 
-                                    ColorFormatSettingRow {
-                                        format-name: "CMYK";
-                                        format-preview: root.current-cmyk;
-                                        is-enabled: root.cmyk-format-enabled;
+                                    FormatRowActions {
+                                        checked: root.cmyk-format-enabled;
                                         toggled(val) => {
                                             root.cmyk-format-enabled = val;
                                             root.format-toggled("CMYK", val);
