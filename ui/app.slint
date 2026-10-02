@@ -494,13 +494,16 @@ component KeyBadge inherits Rectangle {
     border-radius: 4px;
 
     HorizontalLayout {
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 9px;
+        padding-right: 9px;
         alignment: center;
 
-        if root.is-win-key: VerticalLayout {
-            alignment: center;
+        if root.is-win-key: Rectangle {
+            width: 14px;
+
             Rectangle {
+                x: 0px;
+                y: (parent.height - self.height) / 2;
                 width: 14px;
                 height: 14px;
 
@@ -511,15 +514,12 @@ component KeyBadge inherits Rectangle {
             }
         }
 
-        if !root.is-win-key: VerticalLayout {
-            alignment: center;
-            Text {
-                text: root.key-text;
-                font-size: 13px;
-                font-weight: 600;
-                color: #ffffff;
-                vertical-alignment: center;
-            }
+        if !root.is-win-key: Text {
+            text: root.key-text;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            vertical-alignment: center;
         }
     }
 }
@@ -933,60 +933,64 @@ component SettingsRow inherits Rectangle {
     in property <length> row-height: 64px;
     in property <bool> show-divider: false;
 
+    width: 100%;
     height: root.row-height;
     background: transparent;
 
+    // Left Content: Icon + Title/Description pinned at x=20px
     HorizontalLayout {
-        padding-left: 20px;
-        padding-right: 20px;
+        x: 20px;
+        y: 0px;
+        height: parent.height;
         spacing: 16px;
+        alignment: start;
 
-        // Left Content: Icon + Title/Description
-        VerticalLayout {
+        if root.icon-kind != "": VerticalLayout {
             alignment: center;
-
-            HorizontalLayout {
-                spacing: 16px;
-
-                if root.icon-kind != "": IconSlot {
-                    kind: root.icon-kind;
-                    icon-bg: root.icon-bg;
-                }
-
-                VerticalLayout {
-                    alignment: center;
-                    spacing: 2px;
-
-                    Text {
-                        text: root.title;
-                        font-size: 14px;
-                        font-weight: 600;
-                        color: #f0eff1;
-                        vertical-alignment: center;
-                    }
-
-                    if root.description != "": Text {
-                        text: root.description;
-                        font-size: 12px;
-                        color: #8a888c;
-                        vertical-alignment: center;
-                    }
-                }
+            IconSlot {
+                kind: root.icon-kind;
+                icon-bg: root.icon-bg;
             }
         }
 
-        // Constraint Spacer: pushes action slot to the right padding boundary
-        Rectangle { horizontal-stretch: 1; }
-
-        // Right Content: Action slot centered on the row midline
         VerticalLayout {
+            alignment: center;
+            spacing: 2px;
+
+            Text {
+                text: root.title;
+                font-size: 14px;
+                font-weight: 600;
+                color: #f0eff1;
+                vertical-alignment: center;
+            }
+
+            if root.description != "": Text {
+                text: root.description;
+                font-size: 12px;
+                color: #8a888c;
+                vertical-alignment: center;
+            }
+        }
+    }
+
+    // Right Content: Action slot pinned to (parent.width - self.width - 20px)
+    Rectangle {
+        x: parent.width - self.width - 20px;
+        y: 0px;
+        width: action-layout.preferred-width;
+        height: parent.height;
+
+        action-layout := VerticalLayout {
             alignment: center;
             @children
         }
     }
 
     if root.show-divider: Rectangle {
+        x: 20px;
         y: parent.height - 1px;
+        width: parent.width - 40px;
         height: 1px;
         background: #26232b;
     }
@@ -999,6 +1003,7 @@ component SettingsCard inherits Rectangle {
     in property <color> icon-bg: transparent;
     in property <length> row-height: 64px;
 
+    width: 100%;
     height: root.row-height;
     background: #1c1a1e;
     border-radius: 6px;
@@ -1006,6 +1011,8 @@ component SettingsCard inherits Rectangle {
     border-color: #2c2832;
 
     SettingsRow {
+        width: 100%;
+        height: 100%;
         title: root.title;
         description: root.description;
         icon-kind: root.icon-kind;
@@ -1018,12 +1025,14 @@ component SettingsCard inherits Rectangle {
 }
 
 component SettingsGroup inherits Rectangle {
+    width: 100%;
     background: #1c1a1e;
     border-radius: 6px;
     border-width: 1px;
     border-color: #2c2832;
 
     VerticalLayout {
+        width: 100%;
         @children
     }
 }
@@ -1070,16 +1079,16 @@ component FormatRowActions inherits HorizontalLayout {
 
     VerticalLayout {
         alignment: center;
-        ToggleSwitch {
-            checked: root.checked;
-            toggled(val) => { root.toggled(val); }
+        MoreOptionsButton {
+            clicked => { root.more-clicked(); }
         }
     }
 
     VerticalLayout {
         alignment: center;
-        MoreOptionsButton {
-            clicked => { root.more-clicked(); }
+        ToggleSwitch {
+            checked: root.checked;
+            toggled(val) => { root.toggled(val); }
         }
     }
 }
@@ -1090,26 +1099,14 @@ component ShortcutBadgeGroup inherits HorizontalLayout {
     spacing: 6px;
     alignment: center;
 
-    VerticalLayout {
-        alignment: center;
-        KeyBadge { is-win-key: true; }
-    }
-    VerticalLayout {
-        alignment: center;
-        KeyBadge { key-text: "Shift"; }
-    }
-    VerticalLayout {
-        alignment: center;
-        KeyBadge { key-text: "C"; }
-    }
+    KeyBadge { is-win-key: true; }
+    KeyBadge { key-text: "Shift"; }
+    KeyBadge { key-text: "C"; }
 
     Rectangle { width: 6px; background: transparent; }
 
-    VerticalLayout {
-        alignment: center;
-        EditPencilButton {
-            clicked => { root.edit-clicked(); }
-        }
+    EditPencilButton {
+        clicked => { root.edit-clicked(); }
     }
 }
 
@@ -1117,10 +1114,13 @@ component HeroCard inherits Rectangle {
     callback pick-color-clicked();
     callback learn-more-clicked();
 
+    width: 100%;
     height: 80px;
     background: transparent;
 
     HorizontalLayout {
+        width: 100%;
+        height: 100%;
         spacing: 20px;
 
         HeroIllustration { }
@@ -1368,6 +1368,7 @@ export component MainWindow inherits Window {
 
                         // 4. Shortcut Section (Constraint-aligned)
                         VerticalLayout {
+                            width: 100%;
                             spacing: 8px;
 
                             SectionHeader { text: "Shortcut"; }
@@ -1439,6 +1440,7 @@ export component MainWindow inherits Window {
 
                         // 5. Picker behavior Section (Constraint-aligned)
                         VerticalLayout {
+                            width: 100%;
                             spacing: 8px;
 
                             SectionHeader { text: "Picker behavior"; }
@@ -1485,6 +1487,7 @@ export component MainWindow inherits Window {
 
                         // 6. Color formats Section (Constraint-aligned)
                         VerticalLayout {
+                            width: 100%;
                             spacing: 8px;
 
                             SectionHeader { text: "Color formats"; }
