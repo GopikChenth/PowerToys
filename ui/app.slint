@@ -1204,6 +1204,7 @@ export component MainWindow inherits Window {
     in-out property <bool> hsl-format-enabled: true;
     in-out property <bool> hsv-format-enabled: true;
     in-out property <bool> cmyk-format-enabled: true;
+    in-out property <length> window-rounding: 15px;
 
     callback close-requested();
     callback pick-color-clicked();
@@ -1234,7 +1235,7 @@ export component MainWindow inherits Window {
             width: 100%;
             height: 100%;
             background: #141315;
-            border-radius: 15px;
+            border-radius: root.window-rounding;
             clip: true;
 
             HorizontalLayout {
@@ -1908,6 +1909,7 @@ export component PickerPopupWindow inherits Window {
     in-out property <string> edit-g-text: "117";
     in-out property <string> edit-b-text: "78";
     in-out property <string> edit-hex-text: "7d754e";
+    in-out property <length> window-rounding: 15px;
 
     callback close-requested();
     callback pick-requested();
@@ -1928,7 +1930,7 @@ export component PickerPopupWindow inherits Window {
         width: 100%;
         height: 100%;
         background: #18161a;
-        border-radius: 15px;
+        border-radius: root.window-rounding;
         border-width: 1px;
         border-color: #2e2a33;
         clip: true;

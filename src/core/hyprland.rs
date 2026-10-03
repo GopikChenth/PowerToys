@@ -88,4 +88,20 @@ impl HyprlandManager {
     pub fn reload() {
         let _ = Command::new("hyprctl").arg("reload").status();
     }
+
+    /// Queries the active window corner radius from Hyprland via hyprctl
+    pub fn get_window_rounding() -> f32 {
+        if let Ok(output) = Command::new("hyprctl")
+            .args(["getoption", "decoration:rounding", "-j"])
+            .output()
+        {
+            if let Ok(val) = serde_json::from_slice::<serde_json::Value>(&output.stdout) {
+                if let Some(r) = val.get("int").and_then(|v| v.as_i64()) {
+                    return r as f32;
+                }
+            }
+        }
+        // Fallback default
+        15.0
+    }
 }

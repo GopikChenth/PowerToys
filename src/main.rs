@@ -443,6 +443,7 @@ fn setup_popup_callbacks(
 
 fn show_popup_window(initial_hex: &str) {
     if let Ok(popup) = PickerPopupWindow::new() {
+        popup.set_window_rounding(HyprlandManager::get_window_rounding());
         let mut config = AppConfig::load();
         config.add_history_color(initial_hex);
         config.color_picker.last_color = initial_hex.to_string();
@@ -502,6 +503,10 @@ fn main() -> Result<(), slint::PlatformError> {
 
     let app = MainWindow::new()?;
     let popup = PickerPopupWindow::new()?;
+    let hypr_rounding = HyprlandManager::get_window_rounding();
+    app.set_window_rounding(hypr_rounding);
+    popup.set_window_rounding(hypr_rounding);
+
     let cfg = Arc::new(Mutex::new(AppConfig::load()));
 
     let active_hex = Arc::new(Mutex::new(String::new()));
