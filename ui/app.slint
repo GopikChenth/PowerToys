@@ -377,6 +377,7 @@ component SharpButton inherits Rectangle {
     background: primary ? (touch.has-hover ? #c4a7e7 : #b59ee6) : (touch.has-hover ? #2e2b30 : #232125);
     border-width: primary ? 0px : 1px;
     border-color: #38343c;
+    border-radius: 6px;
 
     animate background { duration: 120ms; }
 
@@ -1006,7 +1007,7 @@ component SettingsCard inherits Rectangle {
     width: 100%;
     height: root.row-height;
     background: #1c1a1e;
-    border-radius: 6px;
+    border-radius: 8px;
     border-width: 1px;
     border-color: #2c2832;
 
@@ -1027,7 +1028,7 @@ component SettingsCard inherits Rectangle {
 component SettingsGroup inherits Rectangle {
     width: 100%;
     background: #1c1a1e;
-    border-radius: 6px;
+    border-radius: 8px;
     border-width: 1px;
     border-color: #2c2832;
 
@@ -1121,11 +1122,13 @@ component HeroCard inherits Rectangle {
     HorizontalLayout {
         width: 100%;
         height: 100%;
+        padding-right: 20px;
         spacing: 20px;
 
         HeroIllustration { }
 
         VerticalLayout {
+            horizontal-stretch: 1;
             alignment: center;
             spacing: 6px;
 
@@ -1133,6 +1136,7 @@ component HeroCard inherits Rectangle {
                 text: "Quick and simple system-wide color picker.";
                 font-size: 13px;
                 color: #a6a4a8;
+                wrap: word-wrap;
             }
 
             Rectangle {
@@ -1157,8 +1161,6 @@ component HeroCard inherits Rectangle {
             }
         }
 
-        Rectangle { horizontal-stretch: 1; }
-
         VerticalLayout {
             alignment: center;
 
@@ -1174,7 +1176,7 @@ component HeroCard inherits Rectangle {
 
 export component MainWindow inherits Window {
     title: "PowerToys";
-    background: #141315;
+    background: transparent;
     min-width: 800px;
     min-height: 600px;
 
@@ -1228,8 +1230,15 @@ export component MainWindow inherits Window {
             return reject;
         }
 
-        HorizontalLayout {
-            spacing: 0px;
+        root-window := Rectangle {
+            width: 100%;
+            height: 100%;
+            background: #141315;
+            border-radius: 15px;
+            clip: true;
+
+            HorizontalLayout {
+                spacing: 0px;
 
             // Sidebar (Fixed width)
             Rectangle {
@@ -1602,7 +1611,7 @@ export component MainWindow inherits Window {
                         // 7. Recent Color History Section
                         Rectangle {
                             background: #1c1a1e;
-                            border-radius: 6px;
+                            border-radius: 8px;
                             border-width: 1px;
                             border-color: #2c2832;
 
@@ -1660,6 +1669,7 @@ export component MainWindow inherits Window {
             }
         }
     }
+}
 }
 
 component ColorCardItem inherits Rectangle {
@@ -1918,7 +1928,7 @@ export component PickerPopupWindow inherits Window {
         width: 100%;
         height: 100%;
         background: #18161a;
-        border-radius: 10px;
+        border-radius: 15px;
         border-width: 1px;
         border-color: #2e2a33;
         clip: true;
