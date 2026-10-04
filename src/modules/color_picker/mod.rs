@@ -7,6 +7,7 @@ pub fn copy_to_clipboard(text: &str) {
     let _ = Command::new("wl-copy").arg(text).spawn();
 }
 
+#[allow(dead_code)]
 pub fn notify(summary: &str, body: &str) {
     let _ = Command::new("notify-send")
         .arg("-a")
