@@ -371,15 +371,19 @@ component SidebarItem inherits Rectangle {
 component SharpButton inherits Rectangle {
     in property <string> text: "";
     in property <bool> primary: false;
+    in property <bool> enabled: true;
     callback clicked();
 
     height: 38px;
-    background: primary ? (touch.has-hover ? #c4a7e7 : #b59ee6) : (touch.has-hover ? #2e2b30 : #232125);
+    opacity: root.enabled ? 1.0 : 0.45;
+    background: !root.enabled ? #232125 :
+                (primary ? (touch.has-hover ? #c4a7e7 : #b59ee6) : (touch.has-hover ? #2e2b30 : #232125));
     border-width: primary ? 0px : 1px;
     border-color: #38343c;
     border-radius: 6px;
 
     animate background { duration: 120ms; }
+    animate opacity { duration: 150ms; }
 
     HorizontalLayout {
         padding-left: 12px;
@@ -389,13 +393,19 @@ component SharpButton inherits Rectangle {
             text: root.text;
             font-size: 13px;
             font-weight: 600;
-            color: root.primary ? #141315 : #f0eff1;
+            color: !root.enabled ? #8a888c : (root.primary ? #141315 : #f0eff1);
             vertical-alignment: center;
         }
     }
 
     touch := TouchArea {
-        clicked => { root.clicked(); }
+        enabled: root.enabled;
+        mouse-cursor: root.enabled ? pointer : default;
+        clicked => {
+            if (root.enabled) {
+                root.clicked();
+            }
+        }
     }
 }
 
@@ -1112,6 +1122,7 @@ component ShortcutBadgeGroup inherits HorizontalLayout {
 }
 
 component HeroCard inherits Rectangle {
+    in property <bool> is-enabled: true;
     callback pick-color-clicked();
     callback learn-more-clicked();
 
@@ -1167,7 +1178,12 @@ component HeroCard inherits Rectangle {
             SharpButton {
                 text: "Pick Color (Hyprpicker)";
                 primary: true;
-                clicked => { root.pick-color-clicked(); }
+                enabled: root.is-enabled;
+                clicked => {
+                    if (root.is-enabled) {
+                        root.pick-color-clicked();
+                    }
+                }
             }
         }
     }
@@ -1357,7 +1373,12 @@ export component MainWindow inherits Window {
 
                         // 2. Hero Card (Constraint-aligned)
                         HeroCard {
-                            pick-color-clicked => { root.pick-color-clicked(); }
+                            is-enabled: root.is-color-picker-enabled;
+                            pick-color-clicked => {
+                                if (root.is-color-picker-enabled) {
+                                    root.pick-color-clicked();
+                                }
+                            }
                             learn-more-clicked => { root.status-text = "Official Microsoft PowerToys Color Picker active"; }
                         }
 
@@ -1376,12 +1397,19 @@ export component MainWindow inherits Window {
                             }
                         }
 
-                        // 4. Shortcut Section (Constraint-aligned)
-                        VerticalLayout {
+                        // Settings Sections (Reactive to enabled state)
+                        settings-sections := VerticalLayout {
                             width: 100%;
-                            spacing: 8px;
+                            spacing: 20px;
+                            opacity: root.is-color-picker-enabled ? 1.0 : 0.45;
+                            animate opacity { duration: 150ms; }
 
-                            SectionHeader { text: "Shortcut"; }
+                            // 4. Shortcut Section (Constraint-aligned)
+                            VerticalLayout {
+                                width: 100%;
+                                spacing: 8px;
+
+                                SectionHeader { text: "Shortcut"; }
 
                             SettingsGroup {
                                 SettingsRow {
@@ -1641,6 +1669,7 @@ export component MainWindow inherits Window {
                                     }
                                 }
                             }
+                        }
                         }
 
                         // 8. Status / Feedback Notification Bar

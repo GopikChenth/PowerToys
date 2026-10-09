@@ -467,7 +467,12 @@ fn show_popup_window(initial_hex: &str) {
 fn handle_cli_args() -> bool {
     let args: Vec<String> = std::env::args().collect();
     if args.len() > 1 {
+        let config = AppConfig::load();
+
         if args[1] == "--popup" && args.len() > 2 {
+            if !config.color_picker.enabled {
+                return true;
+            }
             let hex = &args[2];
             // If background daemon is running, dispatch to it for instant 0ms display
             if send_ipc_message(&format!("PICK_COLOR:{}", hex)).is_ok() {
@@ -478,6 +483,10 @@ fn handle_cli_args() -> bool {
         }
 
         if args[1] == "--pick" || args[1] == "-p" {
+            if !config.color_picker.enabled {
+                println!("Color Picker is currently disabled in PowerToys settings.");
+                return true;
+            }
             if let Some(hex) = pick_color_sync() {
                 // If background daemon is running, dispatch to it for instant 0ms display
                 if send_ipc_message(&format!("PICK_COLOR:{}", hex)).is_ok() {
@@ -536,9 +545,11 @@ fn main() -> Result<(), slint::PlatformError> {
         apply_color_to_ui(&app, &config.color_picker.last_color);
         update_history_ui(&app, &config.color_picker.history);
 
-        // Ensure shortcut is registered in Hyprland to invoke `powertoys --pick`
+        // Ensure shortcut state in Hyprland matches configuration
         if config.color_picker.enabled {
             let _ = HyprlandManager::register_shortcut(&config.color_picker.shortcut, "powertoys --pick");
+        } else {
+            let _ = HyprlandManager::unregister_shortcut();
         }
     }
 
@@ -551,6 +562,10 @@ fn main() -> Result<(), slint::PlatformError> {
 
     start_ipc_listener(move |msg| {
         if let Some(hex) = msg.strip_prefix("PICK_COLOR:") {
+            let is_enabled = cfg_ipc.lock().unwrap().color_picker.enabled;
+            if !is_enabled {
+                return;
+            }
             let clean_hex = hex.trim().to_uppercase();
             let weak = app_weak_ipc.clone();
             let pop_weak = popup_weak_ipc.clone();
@@ -603,6 +618,10 @@ fn main() -> Result<(), slint::PlatformError> {
     let sd_btn = Arc::clone(&shades_data);
 
     app.on_pick_color_clicked(move || {
+        let is_enabled = cfg_btn.lock().unwrap().color_picker.enabled;
+        if !is_enabled {
+            return;
+        }
         let weak = app_weak_btn.clone();
         let pop_weak = popup_weak_btn.clone();
         let cfg_inner = Arc::clone(&cfg_btn);
@@ -732,6 +751,11 @@ fn main() -> Result<(), slint::PlatformError> {
         let mut config = cfg_clone.lock().unwrap();
         config.color_picker.enabled = enabled;
         config.save();
+        if enabled {
+            let _ = HyprlandManager::register_shortcut(&config.color_picker.shortcut, "powertoys --pick");
+        } else {
+            let _ = HyprlandManager::unregister_shortcut();
+        }
         if let Some(w) = app_weak.upgrade() {
             w.set_status_text(SharedString::from(if enabled {
                 "Color Picker module enabled"

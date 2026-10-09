@@ -85,6 +85,42 @@ impl HyprlandManager {
         Ok(())
     }
 
+    /// Disables global shortcut in Hyprland by removing bind lines and reloading compositor.
+    pub fn unregister_shortcut() -> Result<(), String> {
+        let home = std::env::var("HOME").map_err(|e| e.to_string())?;
+
+        // 1. Standard Hyprland config (~/.config/hypr/powertoys.conf)
+        let hypr_dir = PathBuf::from(&home).join(".config").join("hypr");
+        let powertoys_conf = hypr_dir.join("powertoys.conf");
+        let bind_content =
+            "# Auto-generated PowerToys Hyprland Keybinds (Disabled)\n\
+             # Keybind disabled while Color Picker is turned off\n\n\
+             # PowerToys Hovering Color Picker Popup Rules\n\
+             windowrulev2 = float, title:^(Color Picker)$\n\
+             windowrulev2 = pin, title:^(Color Picker)$\n\
+             windowrulev2 = center, title:^(Color Picker)$\n\
+             windowrulev2 = size 440 350, title:^(Color Picker)$\n\
+             windowrulev2 = noborder, title:^(Color Picker)$\n";
+        let _ = std::fs::write(&powertoys_conf, bind_content);
+
+        // 2. Caelestia / Midnight Lua Hyprland config (~/.config/powertoys/powertoys.lua)
+        let powertoys_dir = PathBuf::from(&home).join(".config").join("powertoys");
+        let _ = std::fs::create_dir_all(&powertoys_dir);
+        let powertoys_lua = powertoys_dir.join("powertoys.lua");
+        let lua_content =
+            "-- Auto-generated PowerToys Hyprland Lua Keybinds (Disabled)\n\
+             -- Keybind disabled while Color Picker is turned off\n\n\
+             -- PowerToys Color Picker Popup Window Rule\n\
+             pcall(function()\n\
+                 hl.window_rule({ match = { title = \"Color Picker\" }, float = true, pin = true, size = \"440 350\", center = true })\n\
+             end)\n";
+        let _ = std::fs::write(&powertoys_lua, lua_content);
+
+        // 3. Reload Hyprland
+        Self::reload();
+        Ok(())
+    }
+
     pub fn reload() {
         let _ = Command::new("hyprctl").arg("reload").status();
     }
