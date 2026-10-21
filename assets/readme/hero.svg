@@ -1,0 +1,211 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200" height="400" viewBox="0 0 1200 400"
+     role="img" aria-labelledby="title desc">
+  <title id="title">PowerToys for Linux</title>
+  <desc id="desc">A dark-themed hero showing the PowerToys identity, tagline, and a miniature color picker UI representing the app's native Hyprland integration.</desc>
+
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1200" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f0e10"/>
+      <stop offset="100%" stop-color="#18161a"/>
+    </linearGradient>
+    <linearGradient id="card-bg" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#201d24"/>
+      <stop offset="100%" stop-color="#18161a"/>
+    </linearGradient>
+    <linearGradient id="hue-bar" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#ff0000"/>
+      <stop offset="17%" stop-color="#ffff00"/>
+      <stop offset="33%" stop-color="#00ff00"/>
+      <stop offset="50%" stop-color="#00ffff"/>
+      <stop offset="67%" stop-color="#0000ff"/>
+      <stop offset="83%" stop-color="#ff00ff"/>
+      <stop offset="100%" stop-color="#ff0000"/>
+    </linearGradient>
+    <linearGradient id="sat-bar" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#888888"/>
+      <stop offset="100%" stop-color="#b59ee6"/>
+    </linearGradient>
+    <linearGradient id="val-bar" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#b59ee6"/>
+    </linearGradient>
+    <clipPath id="picker-clip">
+      <rect x="700" y="42" width="448" height="316" rx="14"/>
+    </clipPath>
+    <clipPath id="editor-clip">
+      <rect x="810" y="82" width="310" height="248" rx="8"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" rx="18" fill="url(#bg-grad)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.025">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#f0eff1" stroke-width="1"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#f0eff1" stroke-width="1"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#f0eff1" stroke-width="1"/>
+    <line x1="300" y1="0" x2="300" y2="400" stroke="#f0eff1" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="400" stroke="#f0eff1" stroke-width="1"/>
+    <line x1="900" y1="0" x2="900" y2="400" stroke="#f0eff1" stroke-width="1"/>
+  </g>
+
+  <!-- ==================== LEFT: IDENTITY ==================== -->
+  <g id="title-block" transform="translate(60, 60)">
+
+    <!-- 2x2 Logo Grid (matching the Slint logo) -->
+    <rect x="0" y="0" width="22" height="22" rx="4" fill="#0078d4"/>
+    <rect x="27" y="0" width="22" height="22" rx="4" fill="#2b8396"/>
+    <rect x="0" y="27" width="22" height="22" rx="4" fill="#b59ee6"/>
+    <rect x="27" y="27" width="22" height="22" rx="4" fill="#50e3c2"/>
+
+    <!-- Project Name -->
+    <text x="64" y="20" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="28" font-weight="700" fill="#f0eff1" letter-spacing="-0.5">PowerToys</text>
+    <text x="64" y="46" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+          font-size="14" font-weight="500" fill="#8a888c">for Linux</text>
+
+    <!-- Main headline -->
+    <text x="0" y="114" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="42" font-weight="700" fill="#f0eff1" letter-spacing="-1">Microsoft PowerToys,</text>
+    <text x="0" y="164" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="42" font-weight="700" fill="#f0eff1" letter-spacing="-1">rebuilt for
+      <tspan fill="#b59ee6">Hyprland</tspan>.</text>
+
+    <!-- Sub-description -->
+    <text x="0" y="208" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="18" font-weight="400" fill="#8a888c">Blazingly fast color utilities in Rust + Slint with native</text>
+    <text x="0" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="18" font-weight="400" fill="#8a888c">Wayland integration and zero-latency IPC.</text>
+
+    <!-- Tech badges row -->
+    <g transform="translate(0, 262)">
+      <!-- Rust badge -->
+      <rect x="0" y="0" width="64" height="28" rx="4" fill="#1c1a1e" stroke="#2c2832" stroke-width="1"/>
+      <text x="32" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="600" fill="#f0eff1" text-anchor="middle">Rust</text>
+
+      <!-- Slint badge -->
+      <rect x="74" y="0" width="72" height="28" rx="4" fill="#1c1a1e" stroke="#2c2832" stroke-width="1"/>
+      <text x="110" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="600" fill="#f0eff1" text-anchor="middle">Slint 1.9</text>
+
+      <!-- Hyprland badge -->
+      <rect x="156" y="0" width="88" height="28" rx="4" fill="#1c1a1e" stroke="#2c2832" stroke-width="1"/>
+      <text x="200" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="600" fill="#00c8ff" text-anchor="middle">Hyprland</text>
+
+      <!-- Wayland badge -->
+      <rect x="254" y="0" width="80" height="28" rx="4" fill="#1c1a1e" stroke="#2c2832" stroke-width="1"/>
+      <text x="294" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="600" fill="#f0eff1" text-anchor="middle">Wayland</text>
+
+      <!-- MIT badge -->
+      <rect x="344" y="0" width="56" height="28" rx="4" fill="#1c1a1e" stroke="#2c2832" stroke-width="1"/>
+      <text x="372" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="600" fill="#50e3c2" text-anchor="middle">MIT</text>
+    </g>
+  </g>
+
+  <!-- ==================== RIGHT: PICKER UI PROOF ==================== -->
+  <!-- Picker popup window (matches the PickerPopupWindow from Slint) -->
+  <g id="project-proof" clip-path="url(#picker-clip)">
+    <rect x="700" y="42" width="448" height="316" rx="14" fill="#18161a" stroke="#2e2a33" stroke-width="1"/>
+
+    <!-- Titlebar -->
+    <rect x="700" y="42" width="448" height="36" rx="14" fill="#18161a"/>
+    <rect x="700" y="64" width="448" height="14" fill="#18161a"/>
+
+    <!-- Title icon -->
+    <rect x="716" y="52" width="16" height="16" rx="3" fill="#0078d4"/>
+    <rect x="720" y="56" width="8" height="8" rx="1" fill="#ffffff"/>
+    <text x="740" y="65" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="13" font-weight="600" fill="#f0eff1">Color Picker</text>
+
+    <!-- Close X -->
+    <text x="1126" y="65" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="11" font-weight="600" fill="#8a888c" text-anchor="middle">X</text>
+
+    <!-- Toolbar area -->
+    <!-- Pick button -->
+    <rect x="716" y="86" width="72" height="28" rx="4" fill="#242127" stroke="#38343e" stroke-width="1"/>
+    <circle cx="732" cy="100" r="4" fill="#b59ee6"/>
+    <text x="746" y="104" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="12" font-weight="600" fill="#f0eff1">Pick</text>
+
+    <!-- Tune icon button -->
+    <rect x="796" y="86" width="30" height="28" rx="4" fill="#242127" stroke="#38343e" stroke-width="1"/>
+    <line x1="802" y1="94" x2="820" y2="94" stroke="#8a888c" stroke-width="2" stroke-linecap="round"/>
+    <rect x="808" y="91" width="4" height="6" rx="1" fill="#b59ee6"/>
+    <line x1="802" y1="102" x2="820" y2="102" stroke="#8a888c" stroke-width="2" stroke-linecap="round"/>
+    <rect x="814" y="99" width="4" height="6" rx="1" fill="#b59ee6"/>
+
+    <!-- History dots -->
+    <circle cx="852" cy="100" r="8" fill="#b59ee6" stroke="#b59ee6" stroke-width="2"/>
+    <circle cx="876" cy="100" r="7" fill="#e86b6b"/>
+    <circle cx="898" cy="100" r="7" fill="#6bc5e8"/>
+    <circle cx="920" cy="100" r="7" fill="#50e3c2"/>
+    <circle cx="942" cy="100" r="7" fill="#e8c96b"/>
+    <circle cx="964" cy="100" r="7" fill="#0078d4"/>
+
+    <!-- Handle bar -->
+    <rect x="840" y="120" width="120" height="2" rx="1" fill="#38343e"/>
+
+    <!-- Separator -->
+    <line x1="700" y1="126" x2="1148" y2="126" stroke="#27242a" stroke-width="1"/>
+
+    <!-- Shade strip (left side of content) -->
+    <rect x="716" y="138" width="20" height="192" rx="4" fill="#d4c2f0" stroke="#38343e" stroke-width="1"/>
+    <rect x="716" y="176" width="20" height="38" fill="#c4b0e4"/>
+    <rect x="716" y="214" width="20" height="38" fill="#b59ee6" stroke="#ffffff" stroke-width="2"/>
+    <rect x="716" y="252" width="20" height="38" fill="#9580c0"/>
+    <rect x="716" y="290" width="20" height="40" rx="4" fill="#76639a"/>
+    <rect x="716" y="290" width="20" height="4" fill="#76639a"/>
+
+    <!-- Format cards -->
+    <g transform="translate(748, 138)">
+      <!-- HEX card -->
+      <rect x="0" y="0" width="386" height="40" rx="4" fill="#201d24" stroke="#2c2832" stroke-width="1"/>
+      <text x="14" y="25" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="700" fill="#8a888c">HEX</text>
+      <text x="60" y="25" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="13" font-weight="600" fill="#f0eff1">b59ee6</text>
+
+      <!-- RGB card -->
+      <rect x="0" y="48" width="386" height="40" rx="4" fill="#201d24" stroke="#2c2832" stroke-width="1"/>
+      <text x="14" y="73" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="700" fill="#8a888c">RGB</text>
+      <text x="60" y="73" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="13" font-weight="600" fill="#f0eff1">rgb(181, 158, 230)</text>
+
+      <!-- HSL card -->
+      <rect x="0" y="96" width="386" height="40" rx="4" fill="#201d24" stroke="#2c2832" stroke-width="1"/>
+      <text x="14" y="121" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="700" fill="#8a888c">HSL</text>
+      <text x="60" y="121" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="13" font-weight="600" fill="#f0eff1">hsl(259, 58%, 76%)</text>
+
+      <!-- HSV card -->
+      <rect x="0" y="144" width="386" height="40" rx="4" fill="#201d24" stroke="#2c2832" stroke-width="1"/>
+      <text x="14" y="169" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="12" font-weight="700" fill="#8a888c">HSV</text>
+      <text x="60" y="169" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="13" font-weight="600" fill="#f0eff1">hsv(259, 31%, 90%)</text>
+    </g>
+
+    <!-- Toast bar at bottom -->
+    <rect x="700" y="338" width="448" height="20" fill="#1f6473"/>
+    <text x="924" y="353" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="12" font-weight="500" fill="#ffffff" text-anchor="middle">Copied to clipboard</text>
+  </g>
+
+  <!-- Eyedropper crosshair floating near the picker (motif) -->
+  <g transform="translate(672, 310)" opacity="0.6">
+    <circle cx="12" cy="12" r="8" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="12" y1="0" x2="12" y2="6" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="12" y1="18" x2="12" y2="24" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="0" y1="12" x2="6" y2="12" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="18" y1="12" x2="24" y2="12" stroke="#ffffff" stroke-width="1.5"/>
+  </g>
+</svg>

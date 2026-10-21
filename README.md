@@ -1,145 +1,167 @@
-# PowerToys for Linux (Hyprland)
-
 <p align="center">
-  <img src="https://raw.githubusercontent.com/microsoft/PowerToys/main/doc/images/overview/PT_hero_image.png" alt="PowerToys Banner" width="700" />
+  <img src="./assets/readme/hero.svg" width="100%" alt="PowerToys for Linux — Microsoft PowerToys rebuilt for Hyprland. Blazingly fast color utilities in Rust and Slint with native Wayland integration.">
 </p>
 
 <p align="center">
-  <strong>A modern, blazingly fast reimplementation of Microsoft PowerToys utilities for Linux, built with Rust, Slint, and native Hyprland/Wayland integration.</strong>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Language-Rust-orange.svg?style=flat-square&logo=rust" alt="Rust" />
-  <img src="https://img.shields.io/badge/GUI-Slint%201.9-blue.svg?style=flat-square" alt="Slint" />
-  <img src="https://img.shields.io/badge/Compositor-Hyprland%20%2F%20Wayland-00c8ff.svg?style=flat-square" alt="Hyprland" />
-  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License" />
+  <a href="#getting-started"><strong>Get Started</strong></a>&ensp;&middot;&ensp;
+  <a href="#features"><strong>Features</strong></a>&ensp;&middot;&ensp;
+  <a href="#cli--usage"><strong>CLI</strong></a>&ensp;&middot;&ensp;
+  <a href="#architecture"><strong>Architecture</strong></a>&ensp;&middot;&ensp;
+  <a href="#contributing"><strong>Contributing</strong></a>
 </p>
 
 ---
 
-## Overview
-
-**PowerToys for Linux** brings the beloved productivity tools of Microsoft PowerToys to the Linux desktop with native Wayland ergonomics. Designed specifically for **Hyprland** and powered by **Slint**, it delivers a pixel-perfect Fluent Design interface, sub-millisecond IPC responsiveness, and zero-overhead performance.
+PowerToys for Linux brings the productivity tools from Microsoft PowerToys to the Linux desktop with native Wayland ergonomics. Built in **Rust** with **Slint 1.9**, it targets **Hyprland** compositors and delivers a pixel-perfect Fluent Design interface, sub-millisecond IPC responsiveness, and zero-overhead performance.
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎨 Color Picker
-A full-featured color inspection and editing utility designed for designers and developers:
-- **Global Shortcut**: Activate instantly with <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>C</kbd> (customizable).
-- **Native Wayland Sampling**: Uses `hyprpicker` for pixel-accurate color selection on Wayland.
-- **Interactive Color Editor Flyout**:
-  - **Stepped Shades**: Automatically generates light and dark variants of any sampled color.
-  - **Multi-Format Conversion**: Real-time conversions across **HEX**, **RGB**, **HSL**, **HSV**, and **CMYK**.
-  - **HSV Color Sliders**: Fine-tune hue, saturation, and value with live color gradients.
-  - **Color Identification**: Detects and displays human-readable color names.
-  - **History Palette**: Stores recent color picks with quick-copy swatches.
-  - **Direct Clipboard Integration**: Auto-copies clean formatted codes via `wl-copy` with toast notifications.
+<p align="center">
+  <img src="./assets/readme/section-features.svg" width="100%" alt="Features — production-ready color utilities with Wayland-native tooling">
+</p>
 
-### 🪟 Hyprland & Wayland Native Integration
-- **Dynamic Window Rounding**: Automatically queries your active Hyprland corner radius (`decoration:rounding`) via `hyprctl` and applies it seamlessly to the Slint GUI.
-- **Automated Shortcut Management**: Writes and maintains keybindings in `~/.config/hypr/powertoys.conf` and supports Caelestia/Lua Hyprland environments (`~/.config/powertoys/powertoys.lua`).
-- **Instant IPC Daemon**: Background Unix Domain Socket listener ensures floating windows and editor flyouts appear with **0ms latency** without restarting the application.
-- **Floating Window Rules**: Pre-configured Wayland rules (`float`, `pin`, `center`, `noborder`) ensure popups behave like native desktop overlays.
+### Color Picker
 
-### 📝 Text Extractor *(Roadmap / In Development)*
-- Screen region OCR extraction via `slurp` + `grim` + Tesseract neural engine (LSTM).
-- Preprocessing pipeline (upscaling, contrast enhancement, dark-mode inversion) for 99%+ screen accuracy.
-- Immediate clipboard copy and single-line/multiline formatting toggles.
+A full-featured color inspection and editing utility for designers and developers.
+
+| Capability | Detail |
+| :--- | :--- |
+| **Global Shortcut** | Activate instantly with <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>C</kbd> (customizable) |
+| **Native Wayland Sampling** | Uses `hyprpicker` for pixel-accurate color selection on Wayland |
+| **Stepped Shades** | Generates light and dark variants of any sampled color automatically |
+| **Multi-Format Conversion** | Real-time conversion across **HEX**, **RGB**, **HSL**, **HSV**, and **CMYK** |
+| **HSV Color Sliders** | Fine-tune hue, saturation, and value with live gradient tracks |
+| **Color Identification** | Detects and displays human-readable color names |
+| **History Palette** | Stores recent picks with quick-copy swatches |
+| **Clipboard Integration** | Auto-copies formatted codes via `wl-copy` with toast notifications |
+
+### Hyprland & Wayland Native Integration
+
+| Capability | Detail |
+| :--- | :--- |
+| **Dynamic Window Rounding** | Queries your active Hyprland `decoration:rounding` via `hyprctl` and applies it to the GUI |
+| **Shortcut Management** | Writes keybindings to `~/.config/hypr/powertoys.conf`; supports Caelestia/Lua environments |
+| **IPC Daemon** | Background Unix Domain Socket listener ensures floating windows appear with 0ms latency |
+| **Floating Window Rules** | Pre-configured Wayland rules (`float`, `pin`, `center`, `noborder`) for native overlays |
+
+### Text Extractor *(Roadmap)*
+
+> Screen region OCR via `slurp` + `grim` + Tesseract neural engine with preprocessing pipeline for 99%+ screen accuracy, immediate clipboard copy, and formatting toggles.
 
 ---
 
-## 🛠️ Requirements
+## Getting Started
 
-Ensure the following tools and libraries are installed on your system:
+<p align="center">
+  <img src="./assets/readme/section-getting-started.svg" width="100%" alt="Getting Started — install dependencies, build from source, and start picking colors">
+</p>
 
-### Arch Linux / CachyOS
+### Requirements
+
+<details>
+<summary><strong>Arch Linux / CachyOS</strong></summary>
+
 ```bash
 sudo pacman -S hyprpicker wl-clipboard libnotify slurp grim
 ```
 
-*(Optional for upcoming Text Extractor)*:
+Optional for Text Extractor:
 ```bash
 sudo pacman -S tesseract tesseract-data-eng
 ```
+</details>
 
-### Fedora
+<details>
+<summary><strong>Fedora</strong></summary>
+
 ```bash
 sudo dnf install hyprpicker wl-clipboard libnotify slurp grim
 ```
-
----
-
-## 🚀 Building & Running
-
-### Prerequisites
-Make sure you have the latest Rust toolchain installed:
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
+</details>
 
 ### Build from Source
+
 ```bash
-# Clone the repository
+# Install Rust toolchain (if needed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Clone and build
 git clone https://github.com/GopikChenth/powertoys.git
 cd powertoys
-
-# Build release binary
 cargo build --release
 
-# Run PowerToys
+# Run
 ./target/release/powertoys
 ```
 
 ---
 
-## 💻 CLI & Shortcut Usage
+## CLI & Usage
 
-PowerToys can be launched as a background daemon, a standalone GUI, or directly triggered via CLI flags:
+PowerToys runs as a background daemon, a standalone GUI, or via direct CLI flags.
 
 | Command | Action |
 | :--- | :--- |
-| `powertoys` | Launches the main application and starts the IPC background listener |
-| `powertoys --gui` | Forces the main settings dashboard to open |
-| `powertoys --pick` / `-p` | Triggers the color picker immediately |
-| `powertoys --popup <HEX>` | Opens the floating Color Editor flyout for a specific color (e.g. `powertoys --popup "#B59EE6"`) |
+| `powertoys` | Launch the main app and start the IPC background listener |
+| `powertoys --gui` | Open the settings dashboard |
+| `powertoys --pick` / `-p` | Trigger the color picker immediately |
+| `powertoys --popup <HEX>` | Open the color editor flyout for a specific color |
+
+**Example:**
+
+```bash
+# Pick a color and open the editor flyout
+powertoys --pick
+
+# Open the editor for a specific hex value
+powertoys --popup "#B59EE6"
+```
 
 ---
 
-## 📂 Project Architecture
+## Architecture
+
+<p align="center">
+  <img src="./assets/readme/section-architecture.svg" width="100%" alt="Architecture — modular Rust codebase with Slint UI, IPC daemon, and Hyprland integration">
+</p>
 
 ```
 powertoys/
 ├── src/
 │   ├── core/
-│   │   ├── config.rs         # Persistent JSON configuration (~/.config/powertoys/config.json)
-│   │   ├── hyprland.rs       # Hyprland IPC, rounding detection & keybind configuration
+│   │   ├── config.rs         # Persistent JSON config (~/.config/powertoys/config.json)
+│   │   ├── hyprland.rs       # Hyprland IPC, rounding detection & keybind management
 │   │   ├── ipc.rs            # Unix domain socket IPC client & listener
 │   │   └── mod.rs
 │   ├── modules/
 │   │   ├── color_picker/     # Color picker model, shade generation & format conversions
+│   │   ├── text_extractor/   # OCR text extraction module (roadmap)
 │   │   └── mod.rs
-│   └── main.rs               # Application entry point, CLI routing & Slint event loop
+│   └── main.rs               # Entry point, CLI routing & Slint event loop
 ├── ui/
-│   └── app.slint             # Modern Slint UI components, layout & floating editor windows
+│   └── app.slint             # Slint UI: components, layout & floating editor windows
 ├── build.rs                  # Slint compilation build script
-└── Cargo.toml                # Project dependencies
+└── Cargo.toml                # Dependencies: slint 1.9, serde, serde_json
 ```
+
+**How it works:** The main binary starts the Slint event loop alongside a Unix domain socket IPC listener. When you press the global shortcut, Hyprland dispatches `powertoys --pick`, which either sends an IPC message to the running daemon (instant popup) or spawns a standalone picker window. The popup reads your compositor's corner radius, applies Wayland floating rules, and displays the color result with shade generation, format conversion, and clipboard integration — all in a single Rust process with zero external runtime dependencies.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-Contributions, feature suggestions, and pull requests are warmly welcome!
+Contributions, feature suggestions, and pull requests are welcome.
+
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feat/my-new-feature`)
-3. Commit your changes (`git commit -m 'feat: add my feature'`)
-4. Push to the branch (`git push origin feat/my-new-feature`)
+2. Create your feature branch: `git checkout -b feat/my-new-feature`
+3. Commit your changes: `git commit -m 'feat: add my feature'`
+4. Push to the branch: `git push origin feat/my-new-feature`
 5. Open a Pull Request
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
